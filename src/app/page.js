@@ -26,9 +26,20 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Navbar */}
       <header className="flex flex-col md:flex-row justify-between items-center px-8 py-6 bg-white shadow-md">
-        <div className="text-2xl md:text-3xl font-bold text-orange-600 mb-4 md:mb-0">
-          Remi Oseni Foundation
+        <div className="flex items-center mb-4 md:mb-0">
+          {/* Logo Image */}
+          <Image
+            src="/remilogo.jpeg"
+            alt="Remi Logo"
+            width={50}
+            height={50}
+            className="mr-3"
+          />
+          <div className="text-2xl md:text-3xl font-bold text-orange-600">
+            Remi Oseni Foundation
+          </div>
         </div>
+
         <nav className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6">
           {navLinks.map((link, i) => (
             <Link key={i} href={link.href}>
@@ -106,7 +117,6 @@ export default function Home() {
       {/* Vision, Mission, Core Values Section */}
       <section className="bg-gradient-to-r from-yellow-50 via-green-50 to-yellow-100 px-8 py-16 text-gray-800">
         <div className="max-w-7xl mx-auto space-y-12">
-          
           <motion.div
             className="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-orange-500"
             initial="hidden"
