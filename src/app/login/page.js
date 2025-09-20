@@ -1,7 +1,40 @@
-"use client"; // ✅ Required because we’re using state + hooks in Next.js App Router
+"use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+
+function PasswordInput({ value, setValue, placeholder }) {
+  const [show, setShow] = useState(false);
+  const inputRef = useRef(null);
+
+  const toggleShow = () => {
+    setShow(!show);
+    setTimeout(() => inputRef.current?.focus(), 10); // keep cursor in input
+  };
+
+  return (
+    <div className="relative">
+      <input
+        ref={inputRef}
+        type={show ? "text" : "password"}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        autoComplete="current-password"
+        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 pr-10"
+        required
+      />
+      <button
+        type="button"
+        onClick={toggleShow}
+        className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+      >
+        {show ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+      </button>
+    </div>
+  );
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -9,8 +42,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Replace this with your real PHP backend endpoint
-  const API_URL = "https://your-backend.com/login.php";
+  // ✅ Replace with your real PHP backend endpoint
+  const API_URL = "api/login";
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,7 +54,7 @@ export default function LoginPage() {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // PHP will need to handle JSON
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -29,10 +62,7 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (data.success) {
-        // ✅ Save token/session in localStorage or cookies
         localStorage.setItem("token", data.token);
-
-        // ✅ Redirect to dashboard
         window.location.href = "/dashboard";
       } else {
         setError(data.message || "Login failed. Please try again.");
@@ -76,14 +106,10 @@ export default function LoginPage() {
             <label htmlFor="password" className="block text-gray-700 mb-2">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="********"
+            <PasswordInput
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-              required
+              setValue={setPassword}
+              placeholder="********"
             />
           </div>
 

@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // 👈 import router
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Signup() {
+  const router = useRouter(); // 👈 initialize router
   const [form, setForm] = useState({
     nin: "",
     surname: "",
@@ -20,9 +23,18 @@ export default function Signup() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "nin" || name === "phone") {
+      const digits = value.replace(/\D/g, "").slice(0, 11);
+      setForm({ ...form, [name]: digits });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,20 +42,19 @@ export default function Signup() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost/remi-foundation/signup.php", {
+      const res = await fetch("/api/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json", // tell PHP we're sending JSON
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      const data = await res.json(); // expect PHP to return JSON
+      const data = await res.json();
 
-      if (data.success) {
-        setMessage("Signup successful! 🎉 You can now log in.");
+      if (res.ok) {
+        // ✅ redirect after signup
+        router.push("/login");
       } else {
-        setMessage(data.message || "Signup failed. Try again.");
+        setMessage(data.error || data.message || "Signup failed. Try again.");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -59,7 +70,6 @@ export default function Signup() {
         onSubmit={handleSubmit}
         className="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full space-y-6"
       >
-        {/* Attractive Gradient Heading */}
         <h1 className="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-green-500">
           Welcome to Remi Oseni Foundation
         </h1>
@@ -68,14 +78,13 @@ export default function Signup() {
         </p>
 
         {[
-          { name: "nin", placeholder: "NIN" },
+          { name: "nin", placeholder: "NIN (11 digits max)" },
           { name: "surname", placeholder: "Surname" },
           { name: "otherNames", placeholder: "Other Names" },
           { name: "address", placeholder: "Address" },
           { name: "lga", placeholder: "LGA of Residence" },
-          { name: "phone", placeholder: "Phone Number", type: "tel" },
+          { name: "phone", placeholder: "Phone Number (11 digits max)", type: "tel" },
           { name: "email", placeholder: "Email", type: "email" },
-          { name: "password", placeholder: "Password", type: "password" },
           { name: "occupation", placeholder: "Occupation" },
         ].map((field) => (
           <input
@@ -85,10 +94,30 @@ export default function Signup() {
             placeholder={field.placeholder}
             value={form[field.name]}
             onChange={handleChange}
+            maxLength={field.name === "nin" || field.name === "phone" ? 11 : undefined}
             className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
             required
           />
         ))}
+
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
 
         <select
           name="gender"
@@ -127,7 +156,6 @@ export default function Signup() {
           <p className="text-center mt-4 text-sm text-gray-700">{message}</p>
         )}
 
-        {/* Already signed up link */}
         <p className="text-center text-gray-600">
           Already signed up?{" "}
           <Link

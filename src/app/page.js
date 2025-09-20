@@ -23,7 +23,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-500">
       {/* Navbar */}
       <header className="flex flex-col md:flex-row justify-between items-center px-8 py-6 bg-white shadow-md">
         <div className="flex items-center mb-4 md:mb-0">
@@ -71,26 +71,26 @@ export default function Home() {
           <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4">
             <span className="text-orange-500">Welcome to Remi Oseni Foundation</span>
           </h1>
-          <p className="mt-4 text-gray-700 text-lg md:text-xl">
+          <p className="mt-4 text-black-700 text-lg md:text-xl">
             Empowering youth and families through food support and community programs in Ibadan, Oyo State.
           </p>
 
           <div className="mt-8 flex gap-6">
             <button
               onClick={handleSignup}
-              className="bg-yellow-600 text-white px-8 py-4 rounded-lg shadow-lg hover:bg-green-600 transition"
+              className="bg-yellow-600 text-black-800 px-8 py-4 rounded-lg shadow-lg hover:bg-green-600 transition"
             >
               Get Started Today
             </button>
             <button
               onClick={() => {}}
-              className="bg-orange-500 text-white border px-8 py-4 rounded-lg hover:bg-gray-100 transition"
+              className="bg-orange-500 text-black-800 border px-8 py-4 rounded-lg hover:bg-gray-400 transition"
             >
               View Products
             </button>
           </div>
 
-          <p className="mt-4 text-gray-700">
+          <p className="mt-4 text-black-700">
             Already signed up?{" "}
             <span
               onClick={handleLogin}
@@ -106,8 +106,8 @@ export default function Home() {
             <Image
               src="/remi.webp"
               alt="Remi Oseni Foundation"
-              width={400}
-              height={400}
+              width={500}
+              height={500}
               className="rounded-full object-cover transform transition-transform duration-700 group-hover:scale-110 group-hover:rotate-3"
             />
           </div>
@@ -118,49 +118,68 @@ export default function Home() {
       <section className="bg-gradient-to-r from-yellow-50 via-green-50 to-yellow-100 px-8 py-16 text-gray-800">
         <div className="max-w-7xl mx-auto space-y-12">
           <motion.div
-            className="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-orange-500"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={sectionVariants}
-          >
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">VISION STATEMENT</h2>
-            <p className="text-lg">
-              To create a society where every individual, regardless of background, has access to education, healthcare, empowerment, justice, and a dignified quality of life.
-            </p>
-          </motion.div>
+  className="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-yellow-500"
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true }}
+  variants={sectionVariants}
+>
+  <h2 className="text-3xl font-bold text-yellow-600 mb-8 text-center">
+    CORE VALUES
+  </h2>
 
-          <motion.div
-            className="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-green-500"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={sectionVariants}
-          >
-            <h2 className="text-3xl font-bold text-green-600 mb-4">MISSION STATEMENT</h2>
-            <p className="text-lg">
-              To transform lives by providing scholarships and vocational training, empowering youths, indigent women and families, promoting health and community development, fostering peace and leadership, and defending the rights of the poor and vulnerable for a just and equitable society.
-            </p>
-          </motion.div>
+  {/* Cards Grid */}
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {[
+      {
+        title: "INTEGRITY",
+        desc: "Upholding honesty, transparency, and accountability in all endeavors.",
+        color: "border-orange-500",
+      },
+      {
+        title: "COMPASSION",
+        desc: "Serving with empathy and love for the poor, needy, and vulnerable.",
+        color: "border-pink-500",
+      },
+      {
+        title: "EQUITY & JUSTICE",
+        desc: "Ensuring fairness, equality, and the defense of human rights.",
+        color: "border-green-500",
+      },
+      {
+        title: "EMPOWERMENT",
+        desc: "Equipping individuals and communities with skills and opportunities for self-reliance.",
+        color: "border-blue-500",
+      },
+      {
+        title: "SERVICE TO HUMANITY",
+        desc: "Dedicating efforts to initiatives that improve lives, families, and communities.",
+        color: "border-purple-500",
+      },
+      {
+        title: "EXCELLENCE",
+        desc: "Delivering impactful programs with professionalism and measurable results.",
+        color: "border-yellow-500",
+      },
+      {
+        title: "PEACE & LEADERSHIP",
+        desc: "Promoting peaceful coexistence, good governance, and leadership development.",
+        color: "border-red-500",
+      },
+    ].map((value, i) => (
+      <div
+        key={i}
+        className={`p-6 bg-white rounded-2xl shadow-lg border-t-4 ${value.color} hover:shadow-2xl hover:-translate-y-2 transition-transform`}
+      >
+        <h3 className="text-xl font-bold text-gray-800 mb-3">
+          {value.title}
+        </h3>
+        <p className="text-gray-600">{value.desc}</p>
+      </div>
+    ))}
+  </div>
+</motion.div>
 
-          <motion.div
-            className="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-yellow-500"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={sectionVariants}
-          >
-            <h2 className="text-3xl font-bold text-yellow-600 mb-4">CORE VALUES</h2>
-            <ul className="list-disc list-inside space-y-2 text-lg">
-              <li><strong>INTEGRITY</strong> – Upholding honesty, transparency, and accountability in all endeavors.</li>
-              <li><strong>COMPASSION</strong> – Serving with empathy and love for the poor, needy, and vulnerable.</li>
-              <li><strong>EQUITY & JUSTICE</strong> – Ensuring fairness, equality, and the defense of human rights.</li>
-              <li><strong>EMPOWERMENT</strong> – Equipping individuals and communities with skills and opportunities for self-reliance.</li>
-              <li><strong>SERVICE TO HUMANITY</strong> – Dedicating efforts to initiatives that improve lives, families, and communities.</li>
-              <li><strong>EXCELLENCE</strong> – Delivering impactful programs with professionalism and measurable results.</li>
-              <li><strong>PEACE & LEADERSHIP</strong> – Promoting peaceful coexistence, good governance, and leadership development.</li>
-            </ul>
-          </motion.div>
 
           <motion.div
             className="text-center mt-8"
@@ -176,7 +195,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-100 px-8 py-6 flex flex-col md:flex-row justify-between items-center shadow-md">
+      <footer className="bg-gray-600 px-8 py-6 flex flex-col md:flex-row justify-between items-center shadow-md">
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4 md:mb-0">
           <Link href="/location">
             <div className="px-5 py-3 bg-yellow-600 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
