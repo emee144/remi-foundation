@@ -76,9 +76,18 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 relative">
+        {/* Logo at top-left */}
+        {/* Logo at top-center */}
+<img
+  src="/remilogo.jpeg"
+  alt="Remi Foundation Logo"
+  className="w-20 h-20 mx-auto mb-4 object-contain"
+/>
+
+
         {/* Header */}
-        <h2 className="text-3xl font-bold text-center text-green-600 mb-6">
+        <h2 className="text-3xl font-bold text-center text-green-600 mb-6 mt-4">
           Welcome Back
         </h2>
         <p className="text-center text-gray-600 mb-8">

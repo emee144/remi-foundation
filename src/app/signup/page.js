@@ -51,7 +51,6 @@ export default function Signup() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ redirect after signup
         router.push("/login");
       } else {
         setMessage(data.error || data.message || "Signup failed. Try again.");
@@ -68,9 +67,16 @@ export default function Signup() {
     <main className="min-h-screen flex justify-center items-center bg-gray-50 p-6">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full space-y-6"
+        className="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full space-y-6 relative"
       >
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-green-500">
+       {/* Logo at top-center */}
+<img
+  src="/remilogo.jpeg"
+  alt="Remi Foundation Logo"
+  className="w-20 h-20 mx-auto mb-4 object-contain"
+/>
+
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-green-500 mt-4">
           Welcome to Remi Oseni Foundation
         </h1>
         <p className="text-center text-gray-600">
