@@ -40,6 +40,11 @@ export default function Location() {
   return (
     <main className="min-h-screen bg-gradient-to-r from-green-50 via-yellow-50 to-green-100 p-8">
       <div className="max-w-6xl mx-auto">
+          <img
+    src="/remilogo.jpeg"
+    alt="Remi Foundation Logo"
+    className="w-28 h-28 mx-auto mb-6 object-contain"
+  />
         {/* Heading */}
         <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-yellow-500 to-green-600">
           Our Pickup Locations

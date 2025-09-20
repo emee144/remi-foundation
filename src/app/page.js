@@ -9,7 +9,6 @@ export default function Home() {
   const router = useRouter();
 
   const navLinks = [
-    { name: "Shop", href: "#" },
     { name: "Products", href: "products" },
     { name: "Eligibility", href: "/eligibility" },
   ];
@@ -69,7 +68,7 @@ export default function Home() {
       <main className="flex flex-col md:flex-row items-center justify-between px-8 py-20 flex-grow">
         <div className="max-w-2xl">
           <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4">
-            <span className="text-orange-500">Welcome to Remi Oseni Foundation</span>
+            <span className="text-white-700">Welcome to Remi Oseni Foundation</span>
           </h1>
           <p className="mt-4 text-black-700 text-lg md:text-xl">
             Empowering youth and families through food support and community programs in Ibadan, Oyo State.
@@ -94,7 +93,7 @@ export default function Home() {
             Already signed up?{" "}
             <span
               onClick={handleLogin}
-              className="text-orange-500 font-semibold cursor-pointer hover:underline"
+              className="text-white-800 font-semibold cursor-pointer hover:underline"
             >
               Login here
             </span>

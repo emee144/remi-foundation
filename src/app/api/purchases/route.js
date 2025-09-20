@@ -1,11 +1,22 @@
 import { NextResponse } from "next/server";
-import { Purchase } from "@/lib/models/Purchase"; // define model
-import { User } from "@/lib/models/User";
+import { Purchase } from "@/lib/models/Purchase";
+import jwt from "jsonwebtoken";
+
+// Helper to get userId from JWT
+const getUserIdFromReq = (req) => {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader) throw new Error("Missing Authorization header");
+
+  const token = authHeader.split(" ")[1];
+  if (!token) throw new Error("Missing token");
+
+  const payload = jwt.verify(token, process.env.JWT_SECRET);
+  return payload.id;
+};
 
 export async function GET(req) {
   try {
-    // assume userId comes from session/JWT
-    const userId = 1;
+    const userId = getUserIdFromReq(req);
 
     const purchases = await Purchase.findAll({
       where: { userId },
@@ -14,15 +25,15 @@ export async function GET(req) {
 
     return NextResponse.json({ purchases });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message }, { status: 401 });
   }
 }
 
 export async function POST(req) {
   try {
-    const userId = 1;
+    const userId = getUserIdFromReq(req);
 
-    // Check last purchase
+    // Check last purchase for this user
     const lastPurchase = await Purchase.findOne({
       where: { userId },
       order: [["purchaseDate", "DESC"]],
@@ -44,6 +55,6 @@ export async function POST(req) {
     const newPurchase = await Purchase.create({ userId });
     return NextResponse.json({ purchase: newPurchase });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message }, { status: 401 });
   }
 }
