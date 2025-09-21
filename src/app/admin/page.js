@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -108,43 +108,66 @@ export default function AdminPage() {
       {loading && <p className="text-gray-600 text-center">Loading...</p>}
       {searchError && <p className="text-red-500 text-center">{searchError}</p>}
 
-      {results.length > 0 && (
-        <motion.div
-          className="overflow-x-auto"
-          initial="hidden"
-          animate="visible"
-          variants={sectionVariants}
-        >
-          <table className="min-w-full bg-white shadow-lg rounded-2xl overflow-hidden">
-            <thead className="bg-yellow-500 text-white">
-              <tr>
-                <th className="p-3 text-left">NIN</th>
-                <th className="p-3 text-left">Name</th>
-                <th className="p-3 text-left">Phone</th>
-                <th className="p-3 text-left">Email</th>
-                <th className="p-3 text-left">Gender</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((user, i) => (
-                <motion.tr
-                  key={user.id}
-                  className={`border-b hover:bg-yellow-50 transition cursor-pointer ${
-                    i % 2 === 0 ? "bg-gray-50" : ""
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <td className="p-3">{user.nin}</td>
-                  <td className="p-3 font-semibold">{user.surname} {user.otherNames}</td>
-                  <td className="p-3">{user.phone}</td>
-                  <td className="p-3">{user.email}</td>
-                  <td className="p-3">{user.gender}</td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {results.length > 0 && (
+          <motion.div
+            className="overflow-x-auto mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <table className="min-w-full bg-white shadow-lg rounded-2xl overflow-hidden">
+              <thead className="bg-yellow-500 text-white">
+                <tr>
+                  <th className="p-3 text-left">NIN</th>
+                  <th className="p-3 text-left">Name</th>
+                  <th className="p-3 text-left">Phone</th>
+                  <th className="p-3 text-left">Email</th>
+                  <th className="p-3 text-left">Gender</th>
+                  <th className="p-3 text-left">Purchases</th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.map((user, i) => (
+                  <motion.tr
+                    key={user.id}
+                    className={`border-b hover:bg-yellow-50 transition cursor-pointer ${i % 2 === 0 ? "bg-gray-50" : ""}`}
+                    whileHover={{ scale: 1.01 }}
+                  >
+                    <td className="p-3">{user.nin}</td>
+                    <td className="p-3 font-semibold">{user.surname} {user.otherNames}</td>
+                    <td className="p-3">{user.phone}</td>
+                    <td className="p-3">{user.email}</td>
+                    <td className="p-3">{user.gender}</td>
+                    <td className="p-3">
+                      {user.purchases.length === 0 ? (
+                        <span className="text-gray-400">No purchases</span>
+                      ) : (
+                        <table className="w-full bg-gray-50 rounded-lg">
+                          <thead>
+                            <tr>
+                              <th className="text-left p-2 text-sm">Date</th>
+                              <th className="text-left p-2 text-sm">Days Left</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {user.purchases.map((p, idx) => (
+                              <tr key={idx} className="hover:bg-yellow-100 transition">
+                                <td className="p-2 text-sm">{new Date(p.purchaseDate).toLocaleDateString()}</td>
+                                <td className="p-2 text-sm font-semibold">{p.daysLeft}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      )}
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {results.length === 0 && !loading && (
         <p className="text-gray-500 text-center mt-8 text-lg">

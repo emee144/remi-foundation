@@ -29,5 +29,5 @@ export const Purchase = sequelize.define(
 );
 
 // Setup association
-User.hasMany(Purchase, { foreignKey: "userId" });
+User.hasMany(Purchase, { foreignKey: "userId", as: "purchases" });
 Purchase.belongsTo(User, { foreignKey: "userId" });
