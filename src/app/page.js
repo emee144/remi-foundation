@@ -63,7 +63,7 @@ export default function Home() {
           </button>
         </div>
       </header>
-
+     
       {/* Hero Section */}
       <main className="flex flex-col md:flex-row items-center justify-between px-8 py-20 flex-grow">
         <div className="max-w-2xl">
@@ -112,7 +112,7 @@ export default function Home() {
           </div>
         </div>
       </main>
-
+      
       {/* Vision, Mission, Core Values Section */}
       <section className="bg-gradient-to-r from-yellow-50 via-green-50 to-yellow-100 px-8 py-16 text-gray-800">
         <div className="max-w-7xl mx-auto space-y-12">
