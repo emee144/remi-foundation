@@ -159,7 +159,13 @@ export default function Signup() {
   return (
     <main className="min-h-screen flex justify-center items-center bg-gray-50 p-6">
       <form onSubmit={handleSubmit} className="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full space-y-6 relative">
-        <img src="/remilogo.jpeg" alt="Logo" className="w-20 h-20 mx-auto mb-4 object-contain" />
+        <Image
+  src="/remilogo.jpeg"
+  alt="Logo"
+  width={20} // width in pixels
+  height={20} // height in pixels
+  className="mx-auto mb-4 object-contain"
+/>
         <h1 className="text-3xl font-extrabold text-center text-gray-900">Sign Up</h1>
 
         {/* Webcam */}
