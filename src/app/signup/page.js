@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -162,8 +163,8 @@ export default function Signup() {
         <Image
   src="/remilogo.jpeg"
   alt="Logo"
-  width={20} // width in pixels
-  height={20} // height in pixels
+  width={80} // width in pixels
+  height={80} // height in pixels
   className="mx-auto mb-4 object-contain"
 />
         <h1 className="text-3xl font-extrabold text-center text-gray-900">Sign Up</h1>
