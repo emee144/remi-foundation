@@ -31,6 +31,7 @@ export const User = sequelize.define(
     email: { type: DataTypes.STRING, unique: true, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
     profilePicture: { type: DataTypes.BLOB("long"), allowNull: true },
+    faceDescriptor: { type: DataTypes.TEXT, allowNull: false }, 
   },
   {
     timestamps: true,

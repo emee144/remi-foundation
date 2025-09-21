@@ -1,12 +1,14 @@
 {
+
   "development": {
     "username": "root",
-    "password": "Kokoman61",
+    "password": "pNGPnrzripHsAMOtUoVetjrLssmYkiSy",
     "database": "remiosen_remi",
-    "host": "127.0.0.1",
-    "port": 3306,
+    "host": "centerbeam.proxy.rlwy.net",
+    "port": 23216,
     "dialect": "mysql"
   },
+
 
   "test": {
     "username": "root",
