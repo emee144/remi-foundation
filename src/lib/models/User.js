@@ -24,7 +24,7 @@ export const User = sequelize.define(
     otherNames: { type: DataTypes.STRING, allowNull: false },
     address: { type: DataTypes.STRING, allowNull: false },
     lga: { type: DataTypes.STRING, allowNull: false },
-    phone: { type: DataTypes.STRING, allowNull: false },
+    phone: { type: DataTypes.STRING, unique: true, allowNull: false },
     gender: { type: DataTypes.ENUM("male", "female"), allowNull: false },
     ageRange: { type: DataTypes.STRING, allowNull: false },
     occupation: { type: DataTypes.STRING, allowNull: false },

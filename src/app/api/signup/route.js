@@ -29,6 +29,10 @@ export async function POST(req) {
     const existingEmail = await User.findOne({ where: { email: normalizedEmail } });
     if (existingEmail) return NextResponse.json({ error: "Email already registered" }, { status: 409 });
 
+    const existingPhone = await User.findOne({ where: { phone: phoneDigits } });
+if (existingPhone)
+  return NextResponse.json({ error: "Phone number already registered" }, { status: 409 });
+
     // Fetch all existing users' face descriptors
     const existingUsers = await User.findAll({ attributes: ["faceDescriptor", "email"] });
 
