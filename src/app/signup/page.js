@@ -24,12 +24,12 @@ export default function Signup() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [formMessage, setFormMessage] = useState(""); // message for submission errors
   const [showPassword, setShowPassword] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [faceCaptured, setFaceCaptured] = useState(false);
   const [faceData, setFaceData] = useState(null);
-  const [isDuplicateFace, setIsDuplicateFace] = useState(false); // ✅ track duplicates
+  const [isDuplicateFace, setIsDuplicateFace] = useState(false); // track duplicates
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -87,13 +87,12 @@ export default function Signup() {
           const data = await res.json();
 
           if (data.exists) {
-            setMessage("A user with this face already exists. Cannot register again.");
             setFaceCaptured(false);
             setFaceData(null);
-            setIsDuplicateFace(true); // ✅ mark duplicate
+            setIsDuplicateFace(true);
             return;
           } else {
-            setIsDuplicateFace(false); // ✅ face is new
+            setIsDuplicateFace(false);
           }
         } catch (err) {
           console.error("Face comparison error:", err);
@@ -120,16 +119,16 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setFormMessage("");
 
     if (!faceCaptured || !faceData) {
-      setMessage("Please ensure your face is visible to the camera.");
+      setFormMessage("Please ensure your face is visible to the camera.");
       setLoading(false);
       return;
     }
 
     if (isDuplicateFace) {
-      setMessage("Cannot submit: face already registered.");
+      setFormMessage("Cannot submit: face already registered.");
       setLoading(false);
       return;
     }
@@ -147,36 +146,54 @@ export default function Signup() {
       if (res.ok) {
         router.push("/login");
       } else {
-        setMessage(data.error || "Signup failed.");
+        setFormMessage(data.error || "Signup failed.");
       }
     } catch (err) {
       console.error(err);
-      setMessage("Server error. Try later.");
+      setFormMessage("Server error. Try later.");
     } finally {
       setLoading(false);
     }
   };
 
+  const oyoLGAs = [
+    "Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan North",
+    "Ibadan North-East","Ibadan North-West","Ibadan South-East","Ibadan South-West",
+    "Ibarapa Central","Ibarapa East","Ibarapa North","Ido","Irepo",
+    "Iseyin","Itesiwaju","Iwajowa","Kajola","Lagelu",
+    "Ogo Oluwa","Ogbomosho North","Ogbomosho South","Olorunsogo","Oluyole",
+    "Ona Ara","Orelope","Ori Ire","Oyo East","Oyo West",
+    "Saki East","Saki West","Surulere"
+  ];
+
   return (
     <main className="min-h-screen flex justify-center items-center bg-gray-50 p-6">
       <form onSubmit={handleSubmit} className="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full space-y-6 relative">
         <Image
-  src="/remilogo.jpeg"
-  alt="Logo"
-  width={80} // width in pixels
-  height={80} // height in pixels
-  className="mx-auto mb-4 object-contain"
-/>
+          src="/remilogo.jpeg"
+          alt="Logo"
+          width={80}
+          height={80}
+          className="mx-auto mb-4 object-contain"
+        />
         <h1 className="text-3xl font-extrabold text-center text-gray-900">Sign Up</h1>
 
         {/* Webcam */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mb-4">
           <video ref={videoRef} autoPlay muted playsInline className="w-64 h-48 rounded-lg border" />
           <canvas ref={canvasRef} className="hidden" />
-          {faceCaptured ? (
-            <p className="text-green-600 font-semibold mt-2">Face captured ✔️</p>
+
+          {/* Face capture / duplicate messages */}
+          {isDuplicateFace ? (
+            <p className="text-red-600 font-semibold mt-2 text-center">
+              A user with this face already exists. Cannot register again.
+            </p>
+          ) : faceCaptured ? (
+            <p className="text-green-600 font-semibold mt-2 text-center">
+              Face captured ✔️
+            </p>
           ) : (
-            <p className="text-gray-500 mt-2">Ensure your face is visible</p>
+            <p className="text-gray-500 mt-2 text-center">Ensure your face is visible</p>
           )}
         </div>
 
@@ -186,24 +203,65 @@ export default function Signup() {
           { name: "surname", placeholder: "Surname" },
           { name: "otherNames", placeholder: "Other Names" },
           { name: "address", placeholder: "Address" },
-          { name: "lga", placeholder: "LGA" },
-          { name: "phone", placeholder: "Phone Number", type: "tel" },
-          { name: "email", placeholder: "Email", type: "email" },
-          { name: "occupation", placeholder: "Occupation" },
         ].map((field) => (
           <input
             key={field.name}
-            type={field.type || "text"}
+            type="text"
             name={field.name}
             placeholder={field.placeholder}
             value={form[field.name]}
             onChange={handleChange}
-            maxLength={field.name === "nin" || field.name === "phone" ? 11 : undefined}
+            maxLength={field.name === "nin" ? 11 : undefined}
             className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
             required
           />
         ))}
 
+        {/* LGA dropdown for Oyo State */}
+        <select
+          name="lga"
+          value={form.lga}
+          onChange={handleChange}
+          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-900"
+          required
+        >
+          <option value="">Select LGA</option>
+          {oyoLGAs.map((lga) => (
+            <option key={lga} value={lga}>{lga}</option>
+          ))}
+        </select>
+
+        {/* Other fields */}
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Phone Number"
+          value={form.phone}
+          onChange={handleChange}
+          maxLength={11}
+          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
+          required
+        />
+        <input
+          type="text"
+          name="occupation"
+          placeholder="Occupation"
+          value={form.occupation}
+          onChange={handleChange}
+          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
+          required
+        />
+
+        {/* Password */}
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
@@ -219,6 +277,7 @@ export default function Signup() {
           </button>
         </div>
 
+        {/* Gender & Age */}
         <select name="gender" value={form.gender} onChange={handleChange} className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-900" required>
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
@@ -232,11 +291,13 @@ export default function Signup() {
           <option value="61+">61+</option>
         </select>
 
+        {/* Submit */}
         <button type="submit" disabled={loading || !faceCaptured || isDuplicateFace} className="w-full bg-gradient-to-r from-yellow-400 to-green-500 text-white p-4 rounded-lg font-bold hover:opacity-90 transition">
           {loading ? "Signing up..." : "Signup"}
         </button>
 
-        {message && <p className="text-center mt-2 text-red-600">{message}</p>}
+        {/* Submission error messages */}
+        {formMessage && <p className="text-center mt-2 text-red-600">{formMessage}</p>}
 
         <p className="text-center text-gray-600">
           Already registered?{" "}

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image"; // Import Next.js Image
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -10,6 +11,7 @@ export default function AdminPage() {
 
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchError, setSearchError] = useState("");
 
@@ -22,11 +24,36 @@ export default function AdminPage() {
     }
   };
 
+  // Fetch all users after login
+  useEffect(() => {
+    if (!access) return;
+
+    const fetchAllUsers = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/admin/users");
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to fetch users");
+        setAllUsers(data.users || []);
+        setResults(data.users || []); // initially show all users
+      } catch (err) {
+        setSearchError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllUsers();
+  }, [access]);
+
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      setResults(allUsers); // if query is empty, show all users
+      return;
+    }
+
     setLoading(true);
     setSearchError("");
-    setResults([]);
     try {
       const res = await fetch(`/api/admin/users?search=${encodeURIComponent(query)}`);
       const data = await res.json();
@@ -75,15 +102,26 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <motion.h1
-        className="text-4xl font-bold text-yellow-600 mb-8 text-center"
-        initial="hidden"
-        animate="visible"
-        variants={sectionVariants}
-      >
-        Admin Dashboard
-      </motion.h1>
+      {/* Logo at the top center */}
+      <div className="flex flex-col items-center mb-6">
+        <Image
+          src="/remilogo.jpeg" // Make sure this image is in the public folder
+          alt="Remi Logo"
+          width={120}
+          height={120}
+          className="mb-4"
+        />
+        <motion.h1
+          className="text-4xl font-bold text-yellow-600 mb-8 text-center"
+          initial="hidden"
+          animate="visible"
+          variants={sectionVariants}
+        >
+          Remi Oseni Foundation
+        </motion.h1>
+      </div>
 
+      {/* Search bar */}
       <motion.div
         className="flex flex-col md:flex-row gap-4 mb-6 justify-center"
         initial="hidden"
