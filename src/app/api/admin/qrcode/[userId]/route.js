@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { User, Purchase } from "@/lib/models"; // make sure Purchase model exists
+import User from "@/lib/models/User";
+import Purchase from "@/lib/models/Purchase"; 
 
 export async function POST(req, { params }) {
   try {
