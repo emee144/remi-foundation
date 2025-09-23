@@ -72,11 +72,15 @@ export default function Dashboard() {
         <div className="flex items-center gap-4">
           {/* Profile Picture */}
           <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-orange-400">
-            <Image
-              src={profilePic || "/default-avatar.png"}
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
+           import Image from "next/image";
+
+<Image
+  src="/default-avatar.png"
+  alt="Default Avatar"
+  width={80}   // for example
+  height={80}  // for example
+  className="rounded-full"
+/>
           </div>
           <h1 className="text-2xl font-bold text-orange-600">
             Remi Oseni Foundation

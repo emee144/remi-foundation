@@ -57,6 +57,7 @@ export default function ProfilePage() {
 
         const data = await res.json();
         setProfilePicture(data.profilePicture);
+        setPreview(null); // Clear preview once uploaded
       } catch (err) {
         console.error(err);
       } finally {
@@ -70,23 +71,35 @@ export default function ProfilePage() {
     return <p className="text-center mt-20 text-gray-500">Loading profile...</p>;
   }
 
+  const displayImage = preview || profilePicture;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-100 to-gray-50 flex flex-col items-center px-4 pt-12">
       <h1 className="text-4xl font-extrabold text-green-700 mb-8">My Profile</h1>
 
       <div className="flex flex-col items-center gap-8 bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">
         {/* Profile Picture */}
-        <div className="relative w-36 h-36 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center border-4 border-green-200 shadow-md">
-          {profilePicture ? (
-            <image
-              key={preview || profilePicture}
-              src={preview || profilePicture}
+        <div
+          className="relative w-40 h-40 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center border-4 border-green-200 shadow-md"
+          style={
+            displayImage?.startsWith("data:")
+              ? { backgroundImage: `url(${displayImage})`, backgroundSize: "cover", backgroundPosition: "center" }
+              : {}
+          }
+        >
+          {/* Only use Next.js Image for external URLs */}
+          {displayImage && !displayImage.startsWith("data:") && (
+            <Image
+              key={displayImage}
+              src={displayImage}
               alt="Profile"
-              className="w-full h-full object-cover transform transition-all duration-700 ease-in-out opacity-0 scale-90 animate-fadeIn"
+              width={160}
+              height={160}
+              className="object-cover w-full h-full transform transition-all duration-700 ease-in-out opacity-0 scale-90 animate-fadeIn"
             />
-          ) : (
-            <User className="w-20 h-20 text-gray-400" />
           )}
+
+          {!displayImage && <User className="w-20 h-20 text-gray-400" />}
 
           {/* Camera Icon overlay */}
           <label className="absolute bottom-2 right-2 bg-green-500 p-2 rounded-full cursor-pointer hover:bg-green-600 transition">
@@ -129,12 +142,12 @@ export default function ProfilePage() {
           <div className="mt-6 flex flex-col items-center">
             <p className="text-green-700 font-semibold mb-2">My QR Code</p>
             <Image
-  src={profile.qrCode}
-  alt="QR Code"
-  width={160}   // Tailwind w-40 → 40 * 4px = 160px
-  height={160}  // Tailwind h-40 → 160px
-  className="shadow-lg rounded-lg"
-/>
+              src={profile.qrCode}
+              alt="QR Code"
+              width={160}
+              height={160}
+              className="shadow-lg rounded-lg"
+            />
           </div>
         )}
       </div>
