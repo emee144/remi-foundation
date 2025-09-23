@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image"; // Import Next.js Image
+import Image from "next/image";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [searchError, setSearchError] = useState("");
 
+  // Admin login
   const handleLogin = () => {
     if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       setAccess(true);
@@ -24,34 +25,33 @@ export default function AdminPage() {
     }
   };
 
-  // Fetch all users after login
+  // Fetch users from API
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/users");
+      const data = await res.json();
+      console.log("Frontend received users:", data.users);
+      if (!res.ok) throw new Error(data.error || "Failed to fetch users");
+      setAllUsers(data.users || []);
+      setResults(data.users || []);
+    } catch (err) {
+      setSearchError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!access) return;
-
-    const fetchAllUsers = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/admin/users");
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to fetch users");
-        setAllUsers(data.users || []);
-        setResults(data.users || []); // initially show all users
-      } catch (err) {
-        setSearchError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAllUsers();
+    if (access) fetchUsers();
   }, [access]);
 
+  // Search functionality
   const handleSearch = async () => {
     if (!query.trim()) {
-      setResults(allUsers); // if query is empty, show all users
+      setResults(allUsers);
       return;
     }
-
     setLoading(true);
     setSearchError("");
     try {
@@ -66,11 +66,90 @@ export default function AdminPage() {
     }
   };
 
+  // Purchase creation
+  // Purchase creation
+const handlePurchase = async (userId) => {
+  try {
+    const res = await fetch("/api/admin/purchase", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to create purchase");
+
+    // ✅ Save purchase date immediately to localStorage
+    const purchaseDate = new Date().toISOString();
+    localStorage.setItem(`purchaseDate_${userId}`, purchaseDate);
+
+    alert("Purchase created successfully!");
+    fetchUsers();
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+// Calculate days left
+const getDaysLeft = (purchaseDate, userId) => {
+  const now = new Date();
+
+  // Try localStorage first
+  let storedDate = localStorage.getItem(`purchaseDate_${userId}`);
+  let purchaseTime;
+
+  if (storedDate) {
+    purchaseTime = new Date(storedDate);
+  } else if (purchaseDate) {
+    purchaseTime = new Date(purchaseDate);
+    // Save to localStorage only if not already stored
+    localStorage.setItem(`purchaseDate_${userId}`, purchaseTime.toISOString());
+  } else {
+    return 0; // No purchase, 0 days left
+  }
+
+  // Calculate elapsed days
+  const elapsedMs = now - purchaseTime;
+  const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
+  const remainingDays = Math.max(30 - elapsedDays, 0);
+
+  console.log(
+    `User ${userId} | Purchase Date: ${purchaseTime.toISOString()} | Elapsed: ${elapsedDays} | Remaining: ${remainingDays}`
+  );
+
+  return remainingDays;
+};
+
+// Periodically update days left every minute
+useEffect(() => {
+  const interval = setInterval(() => {
+    console.log("Refreshing countdown for all users...");
+    setResults(prev => [...prev]); // triggers re-render
+  }, 60000);
+  return () => clearInterval(interval);
+}, []);
+
+
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
+  const rowVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    hover: { scale: 1.02 },
+  };
+
+  const downloadQR = (qrCode, nin) => {
+    const link = document.createElement("a");
+    link.href = `data:image/png;base64,${qrCode}`;
+    link.download = `QR_${nin}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Login screen
   if (!access) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-yellow-50 via-green-50 to-yellow-100 px-4">
@@ -100,12 +179,12 @@ export default function AdminPage() {
     );
   }
 
+  // Admin panel
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      {/* Logo at the top center */}
       <div className="flex flex-col items-center mb-6">
         <Image
-          src="/remilogo.jpeg" // Make sure this image is in the public folder
+          src="/remilogo.jpeg"
           alt="Remi Logo"
           width={120}
           height={120}
@@ -121,7 +200,7 @@ export default function AdminPage() {
         </motion.h1>
       </div>
 
-      {/* Search bar */}
+      {/* Search */}
       <motion.div
         className="flex flex-col md:flex-row gap-4 mb-6 justify-center"
         initial="hidden"
@@ -146,6 +225,7 @@ export default function AdminPage() {
       {loading && <p className="text-gray-600 text-center">Loading...</p>}
       {searchError && <p className="text-red-500 text-center">{searchError}</p>}
 
+      {/* Users Table */}
       <AnimatePresence>
         {results.length > 0 && (
           <motion.div
@@ -157,50 +237,93 @@ export default function AdminPage() {
             <table className="min-w-full bg-white shadow-lg rounded-2xl overflow-hidden">
               <thead className="bg-yellow-500 text-white">
                 <tr>
+                  <th className="p-3 text-left">QR Code</th>
                   <th className="p-3 text-left">NIN</th>
                   <th className="p-3 text-left">Name</th>
                   <th className="p-3 text-left">Phone</th>
                   <th className="p-3 text-left">Email</th>
                   <th className="p-3 text-left">Gender</th>
-                  <th className="p-3 text-left">Purchases</th>
+                  <th className="p-3 text-left">Purchase</th>
                 </tr>
               </thead>
               <tbody>
-                {results.map((user, i) => (
-                  <motion.tr
-                    key={user.id}
-                    className={`border-b hover:bg-yellow-50 transition cursor-pointer ${i % 2 === 0 ? "bg-gray-50" : ""}`}
-                    whileHover={{ scale: 1.01 }}
-                  >
-                    <td className="p-3">{user.nin}</td>
-                    <td className="p-3 font-semibold">{user.surname} {user.otherNames}</td>
-                    <td className="p-3">{user.phone}</td>
-                    <td className="p-3">{user.email}</td>
-                    <td className="p-3">{user.gender}</td>
-                    <td className="p-3">
-                      {user.purchases.length === 0 ? (
-                        <span className="text-gray-400">No purchases</span>
-                      ) : (
-                        <table className="w-full bg-gray-50 rounded-lg">
-                          <thead>
-                            <tr>
-                              <th className="text-left p-2 text-sm">Date</th>
-                              <th className="text-left p-2 text-sm">Days Left</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {user.purchases.map((p, idx) => (
-                              <tr key={idx} className="hover:bg-yellow-100 transition">
-                                <td className="p-2 text-sm">{new Date(p.purchaseDate).toLocaleDateString()}</td>
-                                <td className="p-2 text-sm font-semibold">{p.daysLeft}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      )}
-                    </td>
-                  </motion.tr>
-                ))}
+                {results.map((user, i) => {
+                  console.log("User:", user.email, "| QR Length:", user.qrCode?.length, "| Sample:", user.qrCode?.slice(0, 50));
+                  const lastPurchase =
+                    user.purchases.length > 0
+                      ? user.purchases[user.purchases.length - 1]
+                      : null;
+                 const daysLeft = lastPurchase ? getDaysLeft(lastPurchase.purchaseDate, user.id) : 0;
+
+                  const canPurchase = daysLeft === 0;
+
+                  return (
+                    <motion.tr
+                      key={user.id}
+                      className={`border-b hover:bg-yellow-50 transition ${
+                        i % 2 === 0 ? "bg-gray-50" : ""
+                      }`}
+                      variants={rowVariants}
+                      initial="hidden"
+                      animate="visible"
+                      whileHover="hover"
+                    >
+                      <td className="p-3">
+                        {user.qrCode ? (
+                          <div className="flex flex-col items-center gap-2">
+                            <img
+  src={user.qrCode.startsWith("data:image") 
+        ? user.qrCode 
+        : `data:image/png;base64,${user.qrCode}`}
+  alt="QR Code"
+  className="w-60 h-60 rounded-lg shadow-lg object-contain"
+/>
+                           <div className="flex gap-2">
+  <button
+    onClick={() => downloadQR(user.qrCode, user.nin)}
+    className="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded"
+  >
+    Download
+  </button>
+
+  <button
+    onClick={() => window.print()}
+    className="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-2 rounded"
+  >
+    Print
+  </button>
+</div>
+
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">No QR</span>
+                        )}
+                      </td>
+                      <td className="p-3">{user.nin}</td>
+                      <td className="p-3 font-semibold">
+                        {user.surname} {user.otherNames}
+                      </td>
+                      <td className="p-3">{user.phone}</td>
+                      <td className="p-3">{user.email}</td>
+                      <td className="p-3">{user.gender}</td>
+                      <td className="p-3">
+                        {lastPurchase ? (
+                          <span className="text-sm font-semibold">{daysLeft} day(s) left</span>
+                        ) : (
+                          <button
+                            onClick={() => handlePurchase(user.id)}
+                            disabled={!canPurchase}
+                            className={`bg-yellow-500 text-white px-3 py-1 rounded font-bold hover:bg-yellow-600 transition ${
+                              !canPurchase ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                          >
+                            Purchase
+                          </button>
+                        )}
+                      </td>
+                    </motion.tr>
+                  );
+                })}
               </tbody>
             </table>
           </motion.div>
@@ -208,9 +331,7 @@ export default function AdminPage() {
       </AnimatePresence>
 
       {results.length === 0 && !loading && (
-        <p className="text-gray-500 text-center mt-8 text-lg">
-          No users found.
-        </p>
+        <p className="text-gray-500 text-center mt-8 text-lg">No users found.</p>
       )}
     </div>
   );

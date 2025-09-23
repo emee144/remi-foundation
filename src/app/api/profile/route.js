@@ -24,6 +24,9 @@ export async function GET(req) {
       profilePicture = `data:image/jpeg;base64,${buffer.toString("base64")}`;
     }
 
+    // QR code stored as base64 string in DB
+    const qrCode = user.qrCode || null;
+
     return NextResponse.json({
       id: user.id,
       email: user.email,
@@ -35,6 +38,7 @@ export async function GET(req) {
       nin: user.nin,
       createdAt: user.createdAt,
       profilePicture,
+      qrCode, // ✅ include QR code
     });
   } catch (err) {
     console.error("Profile fetch error:", err);

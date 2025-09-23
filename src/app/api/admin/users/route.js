@@ -9,30 +9,43 @@ export async function GET(req) {
 
     let where = {};
     if (search && search.trim()) {
-      // search by NIN, phone, or email
+      const query = search.trim().toLowerCase();
+      // search by NIN, phone, or email (case-insensitive)
       where = {
         [Op.or]: [
-          { nin: search },
-          { phone: search },
-          { email: search.toLowerCase() },
+          { nin: query },
+          { phone: query },
+          { email: query },
         ],
       };
     }
-    // else leave 'where' empty to fetch all users
 
     const users = await User.findAll({
       where,
-      attributes: ["id", "nin", "surname", "otherNames", "phone", "email", "gender"],
+      attributes: [
+        "id",
+        "nin",
+        "surname",
+        "otherNames",
+        "phone",
+        "email",
+        "gender",
+        "qrCode" // include QR code
+      ],
       include: [
         {
           model: Purchase,
-          as: "purchases", // must match your association alias
+          as: "purchases",
           attributes: ["purchaseDate"],
         },
       ],
     });
-
-    // calculate days left for each purchase
+console.log("API returning users:", users.map(u => ({
+  id: u.id,
+  email: u.email,
+  qrLen: u.qrCode?.length
+})));
+    // map users to include purchases with daysLeft and trimmed QR code
     const usersWithDaysLeft = users.map(user => {
       const purchases = user.purchases.map(p => {
         const purchaseDate = new Date(p.purchaseDate);
@@ -42,7 +55,15 @@ export async function GET(req) {
         );
         return { purchaseDate, daysLeft: diffDays };
       });
-      return { ...user.toJSON(), purchases };
+
+      const userData = user.toJSON();
+
+      // trim QR code to remove unwanted spaces or newlines
+      if (userData.qrCode) {
+        userData.qrCode = userData.qrCode.trim();
+      }
+
+      return { ...userData, purchases };
     });
 
     return NextResponse.json({ users: usersWithDaysLeft });

@@ -8,28 +8,28 @@ export default function ProfilePage() {
   const [profilePicture, setProfilePicture] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  
-useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (!token) return;
 
-  const fetchProfile = async () => {
-    try {
-      const res = await fetch("/api/profile", {
-        method: "GET", // ✅ FIXED
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch profile");
-      const data = await res.json();
-      setProfile(data);
-      setProfilePicture(data.profilePicture || null); // ✅ use DB picture
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-  fetchProfile();
-}, []);
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch("/api/profile", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch profile");
+        const data = await res.json();
+        setProfile(data);
+        setProfilePicture(data.profilePicture || null);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleUpload = (e) => {
     const file = e.target.files[0];
@@ -38,7 +38,7 @@ useEffect(() => {
     const reader = new FileReader();
     reader.onloadend = async () => {
       const base64 = reader.result;
-      setPreview(base64); // for animation
+      setPreview(base64);
       setLoading(true);
 
       try {
@@ -55,7 +55,7 @@ useEffect(() => {
         if (!res.ok) throw new Error("Failed to upload profile picture");
 
         const data = await res.json();
-        setProfilePicture(data.profilePicture); // ✅ saved in DB
+        setProfilePicture(data.profilePicture);
       } catch (err) {
         console.error(err);
       } finally {
@@ -78,7 +78,7 @@ useEffect(() => {
         <div className="relative w-36 h-36 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center border-4 border-green-200 shadow-md">
           {profilePicture ? (
             <img
-              key={preview || profilePicture} // ensures re-render on change
+              key={preview || profilePicture}
               src={preview || profilePicture}
               alt="Profile"
               className="w-full h-full object-cover transform transition-all duration-700 ease-in-out opacity-0 scale-90 animate-fadeIn"
@@ -122,6 +122,18 @@ useEffect(() => {
             </div>
           ))}
         </div>
+
+        {/* QR Code */}
+        {profile.qrCode && (
+          <div className="mt-6 flex flex-col items-center">
+            <p className="text-green-700 font-semibold mb-2">My QR Code</p>
+            <img
+              src={profile.qrCode}
+              alt="QR Code"
+              className="w-40 h-40 shadow-lg rounded-lg"
+            />
+          </div>
+        )}
       </div>
 
       <style jsx>{`

@@ -1,309 +1,187 @@
-"use client";
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
-import { loadModels } from "@/lib/utils/loadModels";
+'use client';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff } from 'lucide-react';
 
-export default function Signup() {
-  const router = useRouter();
+const oyoLGAs = [
+  "Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan North",
+  "Ibadan North-East", "Ibadan North-West", "Ibadan South-East",
+  "Ibadan South-West", "Ibarapa Central", "Ibarapa East", "Ibarapa North",
+  "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu",
+  "Ogbomosho North", "Ogbomosho South", "Ogo Oluwa", "Olorunsogo",
+  "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West",
+  "Saki East", "Saki West", "Surulere"
+];
 
+const ageRanges = ["21-40", "41-60", "Above 61"];
+
+export default function SignupForm() {
   const [form, setForm] = useState({
-    nin: "",
-    surname: "",
-    otherNames: "",
-    address: "",
-    lga: "",
-    phone: "",
-    gender: "",
-    ageRange: "",
-    occupation: "",
-    email: "",
-    password: "",
+    nin: '',
+    surname: '',
+    otherNames: '',
+    address: '',
+    lga: '',
+    phone: '',
+    gender: 'male',
+    ageRange: '',
+    occupation: '',
+    email: '',
+    password: '',
   });
 
+  const [photo, setPhoto] = useState(null); // NEW
+  const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [formMessage, setFormMessage] = useState(""); // message for submission errors
+  const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [modelsLoaded, setModelsLoaded] = useState(false);
-  const [faceCaptured, setFaceCaptured] = useState(false);
-  const [faceData, setFaceData] = useState(null);
-  const [isDuplicateFace, setIsDuplicateFace] = useState(false); // track duplicates
-
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-
-  // Load face-api models
-  useEffect(() => {
-    async function init() {
-      await loadModels();
-      setModelsLoaded(true);
-      startVideo();
-    }
-    init();
-  }, []);
-
-  const startVideo = () => {
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(stream => {
-          if (videoRef.current) videoRef.current.srcObject = stream;
-        })
-        .catch(err => console.error("Webcam error:", err));
-    }
-  };
-
-  // Face capture & duplicate check
-  useEffect(() => {
-    if (!modelsLoaded) return;
-    let interval;
-
-    const runFaceDetection = async () => {
-      if (!videoRef.current || faceCaptured) return;
-
-      const faceapi = await import("face-api.js");
-      const detection = await faceapi
-        .detectSingleFace(videoRef.current, new faceapi.SsdMobilenetv1Options())
-        .withFaceLandmarks()
-        .withFaceDescriptor();
-
-      if (detection) {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        canvas.width = videoRef.current.videoWidth;
-        canvas.height = videoRef.current.videoHeight;
-        ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
-        const descriptorArray = Array.from(detection.descriptor);
-
-        try {
-          const res = await fetch("/api/compare-face", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ descriptor: descriptorArray }),
-          });
-          const data = await res.json();
-
-          if (data.exists) {
-            setFaceCaptured(false);
-            setFaceData(null);
-            setIsDuplicateFace(true);
-            return;
-          } else {
-            setIsDuplicateFace(false);
-          }
-        } catch (err) {
-          console.error("Face comparison error:", err);
-        }
-
-        setFaceCaptured(true);
-        setFaceData({ descriptor: descriptorArray, image: canvas.toDataURL("image/jpeg") });
-      }
-    };
-
-    interval = setInterval(runFaceDetection, 1000);
-    return () => clearInterval(interval);
-  }, [modelsLoaded, faceCaptured]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "nin" || name === "phone") {
-      setForm({ ...form, [name]: value.replace(/\D/g, "").slice(0, 11) });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
+    if ((name === 'nin' || name === 'phone') && !/^\d*$/.test(value)) return;
+    if ((name === 'nin' || name === 'phone') && value.length > 11) return;
+    setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) setPhoto(file);
+  };
+
+  const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setFormMessage("");
+    setError('');
 
-    if (!faceCaptured || !faceData) {
-      setFormMessage("Please ensure your face is visible to the camera.");
+    if (!photo) {
+      setError('Photo is required.');
       setLoading(false);
       return;
     }
 
-    if (isDuplicateFace) {
-      setFormMessage("Cannot submit: face already registered.");
+    if (form.nin.length !== 11) {
+      setError('NIN must be exactly 11 digits.');
       setLoading(false);
       return;
     }
 
-    const payload = { ...form, faceDescriptor: faceData.descriptor };
+    if (form.phone.length !== 11) {
+      setError('Phone number must be exactly 11 digits.');
+      setLoading(false);
+      return;
+    }
 
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => formData.append(key, value));
+      formData.append('photo', photo);
+
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        body: formData,
       });
+
       const data = await res.json();
 
       if (res.ok) {
-        router.push("/login");
+        setQrCode(data.qrCode);
+
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 2000);
       } else {
-        setFormMessage(data.error || "Signup failed.");
+        setError(data.error);
       }
     } catch (err) {
+      setError('Signup failed. Try again.');
       console.error(err);
-      setFormMessage("Server error. Try later.");
     } finally {
       setLoading(false);
     }
   };
 
-  const oyoLGAs = [
-    "Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan North",
-    "Ibadan North-East","Ibadan North-West","Ibadan South-East","Ibadan South-West",
-    "Ibarapa Central","Ibarapa East","Ibarapa North","Ido","Irepo",
-    "Iseyin","Itesiwaju","Iwajowa","Kajola","Lagelu",
-    "Ogo Oluwa","Ogbomosho North","Ogbomosho South","Olorunsogo","Oluyole",
-    "Ona Ara","Orelope","Ori Ire","Oyo East","Oyo West",
-    "Saki East","Saki West","Surulere"
-  ];
-
   return (
-    <main className="min-h-screen flex justify-center items-center bg-gray-50 p-6">
-      <form onSubmit={handleSubmit} className="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full space-y-6 relative">
-        <Image
-          src="/remilogo.jpeg"
-          alt="Logo"
-          width={80}
-          height={80}
-          className="mx-auto mb-4 object-contain"
-        />
-        <h1 className="text-3xl font-extrabold text-center text-gray-900">Sign Up</h1>
-
-        {/* Webcam */}
-        <div className="flex flex-col items-center mb-4">
-          <video ref={videoRef} autoPlay muted playsInline className="w-64 h-48 rounded-lg border" />
-          <canvas ref={canvasRef} className="hidden" />
-
-          {/* Face capture / duplicate messages */}
-          {isDuplicateFace ? (
-            <p className="text-red-600 font-semibold mt-2 text-center">
-              A user with this face already exists. Cannot register again.
-            </p>
-          ) : faceCaptured ? (
-            <p className="text-green-600 font-semibold mt-2 text-center">
-              Face captured ✔️
-            </p>
-          ) : (
-            <p className="text-gray-500 mt-2 text-center">Ensure your face is visible</p>
-          )}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-green-300 to-yellow-300 p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, type: 'spring', stiffness: 120 }}
+        className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md"
+      >
+        <div className="flex flex-col items-center mb-6">
+          <img src="/remilogo.jpeg" alt="Remi Foundation Logo" className="w-24 h-24 mb-2 rounded-full shadow-lg" />
+          <h2 className="text-3xl font-bold text-green-900">Remi Foundation</h2>
         </div>
 
-        {/* Form fields */}
-        {[
-          { name: "nin", placeholder: "NIN (11 digits max)" },
-          { name: "surname", placeholder: "Surname" },
-          { name: "otherNames", placeholder: "Other Names" },
-          { name: "address", placeholder: "Address" },
-        ].map((field) => (
-          <input
-            key={field.name}
-            type="text"
-            name={field.name}
-            placeholder={field.placeholder}
-            value={form[field.name]}
-            onChange={handleChange}
-            maxLength={field.name === "nin" ? 11 : undefined}
-            className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
-            required
-          />
-        ))}
+        <form onSubmit={handleSignup} className="space-y-4" encType="multipart/form-data">
+          <input type="text" name="nin" placeholder="NIN (11 digits)" value={form.nin} onChange={handleChange} required
+            className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors" />
+          <input type="text" name="phone" placeholder="Phone (11 digits)" value={form.phone} onChange={handleChange} required
+            className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors" />
 
-        {/* LGA dropdown for Oyo State */}
-        <select
-          name="lga"
-          value={form.lga}
-          onChange={handleChange}
-          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-900"
-          required
-        >
-          <option value="">Select LGA</option>
-          {oyoLGAs.map((lga) => (
-            <option key={lga} value={lga}>{lga}</option>
+          {['surname','otherNames','address','occupation','email'].map(field => (
+            <input key={field} type="text" name={field} placeholder={field} value={form[field]} onChange={handleChange} required
+              className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors" />
           ))}
-        </select>
 
-        {/* Other fields */}
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone Number"
-          value={form.phone}
-          onChange={handleChange}
-          maxLength={11}
-          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
-          required
-        />
-        <input
-          type="text"
-          name="occupation"
-          placeholder="Occupation"
-          value={form.occupation}
-          onChange={handleChange}
-          className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
-          required
-        />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors pr-12"
+            />
+            <button type="button" onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
 
-        {/* Password */}
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500 text-gray-900"
-            required
-          />
-          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-3 flex items-center text-gray-500">
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
-        </div>
+          <select name="gender" value={form.gender} onChange={handleChange} required
+            className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
 
-        {/* Gender & Age */}
-        <select name="gender" value={form.gender} onChange={handleChange} className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-900" required>
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
+          <select name="ageRange" value={form.ageRange} onChange={handleChange} required
+            className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors">
+            <option value="">Select Age Range</option>
+            {ageRanges.map(range => <option key={range} value={range}>{range}</option>)}
+          </select>
 
-        <select name="ageRange" value={form.ageRange} onChange={handleChange} className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-900" required>
-          <option value="">Select Age Range</option>
-          <option value="25-40">25-40</option>
-          <option value="41-60">41-60</option>
-          <option value="61+">61+</option>
-        </select>
+          <select name="lga" value={form.lga} onChange={handleChange} required
+            className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors">
+            <option value="">Select LGA</option>
+            {oyoLGAs.map(lga => <option key={lga} value={lga}>{lga}</option>)}
+          </select>
 
-        {/* Submit */}
-        <button type="submit" disabled={loading || !faceCaptured || isDuplicateFace} className="w-full bg-gradient-to-r from-yellow-400 to-green-500 text-white p-4 rounded-lg font-bold hover:opacity-90 transition">
-          {loading ? "Signing up..." : "Signup"}
-        </button>
+          {/* Photo Upload */}
+          <div>
+            <label className="block mb-1 font-semibold text-green-900">Upload Photo</label>
+            <input type="file" accept="image/*" onChange={handlePhotoChange} required
+              className="w-full p-2 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors" />
+          </div>
 
-        {/* Submission error messages */}
-        {formMessage && <p className="text-center mt-2 text-red-600">{formMessage}</p>}
+          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+            type="submit" disabled={loading}
+            className="w-full bg-green-500 hover:bg-yellow-400 text-white font-bold py-3 rounded-xl shadow-lg transition-colors">
+            {loading ? 'Signing up...' : 'Signup'}
+          </motion.button>
+        </form>
 
-        <p className="text-center text-gray-600">
-          Already registered?{" "}
-          <Link href="/login" className="text-yellow-500 font-semibold hover:underline">Login</Link>
-        </p>
-      </form>
-    </main>
+        {error && <p className="mt-4 text-red-600 font-semibold">{error}</p>}
+
+        {qrCode && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+            className="mt-6 text-center">
+            <h3 className="text-xl font-bold text-green-900 mb-2">Your QR Code</h3>
+            <img src={qrCode} alt="Your QR code" className="mx-auto w-48 h-48 rounded-xl shadow-lg" />
+          </motion.div>
+        )}
+      </motion.div>
+    </div>
   );
 }

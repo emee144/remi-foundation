@@ -1,85 +1,88 @@
-// /api/signup1/route.js
-import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-import { User } from "@/lib/models/User";
+import { NextResponse } from 'next/server';
+import QRCode from 'qrcode';
+import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
+import { User } from '@/lib/models/User';
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const {
-      nin, surname, otherNames, address, lga,
-      phone, gender, ageRange, occupation,
-      email, password, faceDescriptor
-    } = body || {};
+    console.log('--- Signup request received ---');
+    const formData = await req.formData();
 
-    if (!nin || !surname || !otherNames || !address || !lga || !phone || !gender || !ageRange || !occupation || !email || !password || !faceDescriptor) {
-      return NextResponse.json({ error: "All fields + face required" }, { status: 400 });
+    const data = {
+      nin: formData.get('nin'),
+      surname: formData.get('surname'),
+      otherNames: formData.get('otherNames'),
+      address: formData.get('address'),
+      lga: formData.get('lga'),
+      phone: formData.get('phone'),
+      gender: formData.get('gender'),
+      ageRange: formData.get('ageRange'),
+      occupation: formData.get('occupation'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    };
+
+    const photoFile = formData.get('photo');
+    console.log('Received photo:', photoFile?.name);
+
+    let photoBuffer = null;
+    if (photoFile) {
+      photoBuffer = Buffer.from(await photoFile.arrayBuffer());
     }
 
-    // Ensure faceDescriptor is an array
-    if (!Array.isArray(faceDescriptor) || faceDescriptor.length !== 128) {
-      return NextResponse.json({ error: "Invalid face descriptor" }, { status: 400 });
-    }
-
-    const ninDigits = String(nin).replace(/\D/g, "");
-    const phoneDigits = String(phone).replace(/\D/g, "");
-    const normalizedEmail = String(email).trim().toLowerCase();
-
-    // Check email uniqueness
-    const existingEmail = await User.findOne({ where: { email: normalizedEmail } });
-    if (existingEmail) return NextResponse.json({ error: "Email already registered" }, { status: 409 });
-
-    const existingPhone = await User.findOne({ where: { phone: phoneDigits } });
-if (existingPhone)
-  return NextResponse.json({ error: "Phone number already registered" }, { status: 409 });
-
-    // Fetch all existing users' face descriptors
-    const existingUsers = await User.findAll({ attributes: ["faceDescriptor", "email"] });
-
-    // Compare faces
-    for (let user of existingUsers) {
-      if (!user.faceDescriptor) continue;
-      const dbDescriptor = JSON.parse(user.faceDescriptor);
-
-      if (dbDescriptor.length !== 128) continue; // skip invalid data
-
-      const distance = Math.sqrt(
-        dbDescriptor.reduce((sum, val, i) => sum + (val - faceDescriptor[i]) ** 2, 0)
-      );
-
-      console.log("Comparing with user:", user.email, "Distance:", distance);
-
-      if (distance < 0.55) {
-        // Duplicate face detected
-        return NextResponse.json({ error: `Face already registered for ${user.email}. Signup denied.` }, { status: 409 });
-      }
-    }
-
-    // No match, create user
-    const newUser = await User.create({
-      nin: ninDigits,
-      surname,
-      otherNames,
-      address,
-      lga,
-      phone: phoneDigits,
-      gender,
-      ageRange,
-      occupation,
-      email: normalizedEmail,
-      password, // hash in production!
-      faceDescriptor: JSON.stringify(faceDescriptor),
+    // 1️⃣ Create user first
+    const user = await User.create({
+      ...data,
+      profilePicture: photoBuffer,
     });
+    console.log(`User created with ID: ${user.id}`);
 
-    const token = jwt.sign(
-      { id: newUser.id, email: newUser.email },
-      process.env.JWT_SECRET || "secretkey",
-      { expiresIn: "365d" }
+    // 2️⃣ Generate QR code with user info
+    const qrBuffer = await QRCode.toBuffer(
+      `${data.surname} ${data.otherNames} | NIN: ${data.nin}`,
+      { type: 'png', errorCorrectionLevel: 'H', margin: 2, width: 400 }
     );
 
-    return NextResponse.json({ message: "Signup successful", token, userId: newUser.id }, { status: 201 });
+    // 3️⃣ Resize photo for QR overlay
+    const profilePicPath = path.join('/tmp', `profile_${Date.now()}.png`);
+    if (photoBuffer) await sharp(photoBuffer).resize(120, 120).png().toFile(profilePicPath);
+
+    // 4️⃣ Overlay profile picture in center
+    let qrWithPic = await sharp(qrBuffer)
+      .composite([{ input: profilePicPath, gravity: 'center' }])
+      .png()
+      .toBuffer();
+
+    // 5️⃣ Add "Remioseni Foundation" text at top
+    qrWithPic = await sharp(qrWithPic)
+      .extend({
+        top: 50,
+        background: { r: 255, g: 255, b: 255, alpha: 1 },
+      })
+      .composite([{
+        input: Buffer.from(
+          `<svg width="400" height="50">
+            <text x="50%" y="50%" font-size="24" text-anchor="middle" fill="green" font-family="Arial">Remioseni Foundation</text>
+          </svg>`
+        ),
+        top: 0,
+        left: 0,
+      }])
+      .png()
+      .toBuffer();
+
+    const qrCodeDataUrl = `data:image/png;base64,${qrWithPic.toString('base64')}`;
+
+    // 6️⃣ Save QR code to user in DB
+    user.qrCode = qrCodeDataUrl;
+    await user.save();
+    console.log('✅ QR code saved successfully for user:', user.email);
+
+    return NextResponse.json({ qrCode: qrCodeDataUrl });
   } catch (err) {
-    console.error("SIGNUP ERROR:", err);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    console.error('❌ Signup error:', err);
+    return NextResponse.json({ error: 'Signup failed. Check server logs.' }, { status: 500 });
   }
 }
