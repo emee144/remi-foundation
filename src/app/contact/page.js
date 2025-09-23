@@ -27,7 +27,7 @@ export default function ContactPage() {
 
   return (
     <div className="bg-gradient-to-br from-green-50 to-yellow-50 min-h-screen py-16 px-6">
-        <img
+        <Image
     src="/remilogo.jpeg"
     alt="Remi Foundation Logo"
     className="w-28 h-28 mx-auto mb-6 object-contain"

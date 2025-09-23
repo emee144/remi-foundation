@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { User, Camera } from "lucide-react";
+import Image from "next/image";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -77,7 +78,7 @@ export default function ProfilePage() {
         {/* Profile Picture */}
         <div className="relative w-36 h-36 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center border-4 border-green-200 shadow-md">
           {profilePicture ? (
-            <img
+            <image
               key={preview || profilePicture}
               src={preview || profilePicture}
               alt="Profile"
@@ -127,11 +128,13 @@ export default function ProfilePage() {
         {profile.qrCode && (
           <div className="mt-6 flex flex-col items-center">
             <p className="text-green-700 font-semibold mb-2">My QR Code</p>
-            <img
-              src={profile.qrCode}
-              alt="QR Code"
-              className="w-40 h-40 shadow-lg rounded-lg"
-            />
+            <Image
+  src={profile.qrCode}
+  alt="QR Code"
+  width={160}   // Tailwind w-40 → 40 * 4px = 160px
+  height={160}  // Tailwind h-40 → 160px
+  className="shadow-lg rounded-lg"
+/>
           </div>
         )}
       </div>

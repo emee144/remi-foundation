@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
 
 function PasswordInput({ value, setValue, placeholder }) {
   const [show, setShow] = useState(false);
@@ -79,10 +80,12 @@ export default function LoginPage() {
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 relative">
         {/* Logo at top-left */}
         {/* Logo at top-center */}
-<img
+<Image
   src="/remilogo.jpeg"
   alt="Remi Foundation Logo"
-  className="w-20 h-20 mx-auto mb-4 object-contain"
+  width={80}   // matches your w-20 (20 * 4px = 80px)
+  height={80}  // matches your h-20
+  className="mx-auto mb-4 object-contain"
 />
 
 

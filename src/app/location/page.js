@@ -2,6 +2,8 @@
 "use client";
 
 import { MapPin, Phone, Clock } from "lucide-react";
+import Image from next/Image;
+import Image from "next/image";
 
 export default function Location() {
   const locations = [
@@ -40,7 +42,7 @@ export default function Location() {
   return (
     <main className="min-h-screen bg-gradient-to-r from-green-50 via-yellow-50 to-green-100 p-8">
       <div className="max-w-6xl mx-auto">
-          <img
+          <Image
     src="/remilogo.jpeg"
     alt="Remi Foundation Logo"
     className="w-28 h-28 mx-auto mb-6 object-contain"

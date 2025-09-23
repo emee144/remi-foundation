@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ClipboardList, Settings, User, LogOut, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -71,7 +72,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-4">
           {/* Profile Picture */}
           <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-orange-400">
-            <img
+            <Image
               src={profilePic || "/default-avatar.png"}
               alt="Profile"
               className="w-full h-full object-cover"
