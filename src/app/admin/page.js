@@ -25,13 +25,18 @@ export default function AdminPage() {
     }
   };
 
+  // Admin logout
+  const handleLogout = () => {
+    setAccess(false);
+    setPassword("");
+  };
+
   // Fetch users from API
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/admin/users");
       const data = await res.json();
-      console.log("Frontend received users:", data.users);
       if (!res.ok) throw new Error(data.error || "Failed to fetch users");
       setAllUsers(data.users || []);
       setResults(data.users || []);
@@ -67,67 +72,50 @@ export default function AdminPage() {
   };
 
   // Purchase creation
-  // Purchase creation
-const handlePurchase = async (userId) => {
-  try {
-    const res = await fetch("/api/admin/purchase", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to create purchase");
+  const handlePurchase = async (userId) => {
+    try {
+      const res = await fetch("/api/admin/purchase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to create purchase");
 
-    // ✅ Save purchase date immediately to localStorage
-    const purchaseDate = new Date().toISOString();
-    localStorage.setItem(`purchaseDate_${userId}`, purchaseDate);
+      const purchaseDate = new Date().toISOString();
+      localStorage.setItem(`purchaseDate_${userId}`, purchaseDate);
 
-    alert("Purchase created successfully!");
-    fetchUsers();
-  } catch (err) {
-    alert(err.message);
-  }
-};
+      alert("Purchase created successfully!");
+      fetchUsers();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
-// Calculate days left
-const getDaysLeft = (purchaseDate, userId) => {
-  const now = new Date();
+  // Calculate days left
+  const getDaysLeft = (purchaseDate, userId) => {
+    const now = new Date();
+    let storedDate = localStorage.getItem(`purchaseDate_${userId}`);
+    let purchaseTime;
 
-  // Try localStorage first
-  let storedDate = localStorage.getItem(`purchaseDate_${userId}`);
-  let purchaseTime;
+    if (storedDate) {
+      purchaseTime = new Date(storedDate);
+    } else if (purchaseDate) {
+      purchaseTime = new Date(purchaseDate);
+      localStorage.setItem(`purchaseDate_${userId}`, purchaseTime.toISOString());
+    } else {
+      return 0;
+    }
 
-  if (storedDate) {
-    purchaseTime = new Date(storedDate);
-  } else if (purchaseDate) {
-    purchaseTime = new Date(purchaseDate);
-    // Save to localStorage only if not already stored
-    localStorage.setItem(`purchaseDate_${userId}`, purchaseTime.toISOString());
-  } else {
-    return 0; // No purchase, 0 days left
-  }
+    const elapsedMs = now - purchaseTime;
+    const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
+    return Math.max(30 - elapsedDays, 0);
+  };
 
-  // Calculate elapsed days
-  const elapsedMs = now - purchaseTime;
-  const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
-  const remainingDays = Math.max(30 - elapsedDays, 0);
-
-  console.log(
-    `User ${userId} | Purchase Date: ${purchaseTime.toISOString()} | Elapsed: ${elapsedDays} | Remaining: ${remainingDays}`
-  );
-
-  return remainingDays;
-};
-
-// Periodically update days left every minute
-useEffect(() => {
-  const interval = setInterval(() => {
-    console.log("Refreshing countdown for all users...");
-    setResults(prev => [...prev]); // triggers re-render
-  }, 60000);
-  return () => clearInterval(interval);
-}, []);
-
+  useEffect(() => {
+    const interval = setInterval(() => setResults(prev => [...prev]), 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -149,27 +137,66 @@ useEffect(() => {
     document.body.removeChild(link);
   };
 
+  const printUser = (user) => {
+    const printWindow = window.open("", "_blank", "width=800,height=600");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print QR</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              margin: 0;
+            }
+            .container {
+              text-align: center;
+              page-break-inside: avoid;
+            }
+            img {
+              width: 200px;
+              height: 200px;
+              display: block;
+              margin: 0 auto 20px auto;
+            }
+            p, h1 { margin: 5px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>Remi Oseni Foundation</h1>
+            <img src="${user.qrCode.startsWith("data:image") ? user.qrCode : `data:image/png;base64,${user.qrCode}`}" alt="QR Code" />
+            <p><strong>NIN:</strong> ${user.nin}</p>
+            <p><strong>Name:</strong> ${user.surname} ${user.otherNames}</p>
+            <p><strong>Phone:</strong> ${user.phone}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Gender:</strong> ${user.gender}</p>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+
   // Login screen
   if (!access) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-yellow-50 via-green-50 to-yellow-100 px-4">
-        <motion.div
-          className="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md text-center"
-          initial="hidden"
-          animate="visible"
-          variants={sectionVariants}
+        <motion.div className="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md text-center"
+          initial="hidden" animate="visible" variants={sectionVariants}
         >
           <h1 className="text-3xl font-bold mb-6 text-yellow-600">Admin Login</h1>
           {error && <p className="text-red-500 mb-4">{error}</p>}
-          <input
-            type="password"
-            placeholder="Enter admin password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+          <input type="password" placeholder="Enter admin password" value={password} onChange={(e) => setPassword(e.target.value)}
             className="w-full p-4 border rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-yellow-500"
           />
-          <button
-            onClick={handleLogin}
+          <button onClick={handleLogin}
             className="w-full bg-yellow-500 text-white py-3 rounded-lg font-bold hover:bg-yellow-600 transition"
           >
             Login
@@ -182,42 +209,32 @@ useEffect(() => {
   // Admin panel
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="flex flex-col items-center mb-6">
-        <Image
-          src="/remilogo.jpeg"
-          alt="Remi Logo"
-          width={120}
-          height={120}
-          className="mb-4"
-        />
-        <motion.h1
-          className="text-4xl font-bold text-yellow-600 mb-8 text-center"
-          initial="hidden"
-          animate="visible"
-          variants={sectionVariants}
+      {/* Header with logo + shifted logout */}
+      <div className="flex justify-between items-start mb-6">
+        <div className="flex flex-col items-center">
+          <Image src="/remilogo.jpeg" alt="Remi Logo" width={120} height={120} className="mb-4"/>
+          <motion.h1 className="text-4xl font-bold text-yellow-600 mb-2 text-center"
+            initial="hidden" animate="visible" variants={sectionVariants}
+          >
+            Remi Oseni Foundation
+          </motion.h1>
+        </div>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold mt-4"
         >
-          Remi Oseni Foundation
-        </motion.h1>
+          Logout
+        </button>
       </div>
 
       {/* Search */}
-      <motion.div
-        className="flex flex-col md:flex-row gap-4 mb-6 justify-center"
-        initial="hidden"
-        animate="visible"
-        variants={sectionVariants}
+      <motion.div className="flex flex-col md:flex-row gap-4 mb-6 justify-center"
+        initial="hidden" animate="visible" variants={sectionVariants}
       >
-        <input
-          type="text"
-          placeholder="Search by NIN, phone, or email"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+        <input type="text" placeholder="Search by NIN, phone, or email" value={query} onChange={(e) => setQuery(e.target.value)}
           className="flex-1 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
         />
-        <button
-          onClick={handleSearch}
-          className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition font-bold"
-        >
+        <button onClick={handleSearch} className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition font-bold">
           Search
         </button>
       </motion.div>
@@ -228,12 +245,7 @@ useEffect(() => {
       {/* Users Table */}
       <AnimatePresence>
         {results.length > 0 && (
-          <motion.div
-            className="overflow-x-auto mt-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+          <motion.div className="overflow-x-auto mt-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <table className="min-w-full bg-white shadow-lg rounded-2xl overflow-hidden">
               <thead className="bg-yellow-500 text-white">
                 <tr>
@@ -248,61 +260,39 @@ useEffect(() => {
               </thead>
               <tbody>
                 {results.map((user, i) => {
-                  console.log("User:", user.email, "| QR Length:", user.qrCode?.length, "| Sample:", user.qrCode?.slice(0, 50));
-                  const lastPurchase =
-                    user.purchases.length > 0
-                      ? user.purchases[user.purchases.length - 1]
-                      : null;
-                 const daysLeft = lastPurchase ? getDaysLeft(lastPurchase.purchaseDate, user.id) : 0;
-
+                  const lastPurchase = user.purchases.length > 0 ? user.purchases[user.purchases.length - 1] : null;
+                  const daysLeft = lastPurchase ? getDaysLeft(lastPurchase.purchaseDate, user.id) : 0;
                   const canPurchase = daysLeft === 0;
 
                   return (
-                    <motion.tr
-                      key={user.id}
-                      className={`border-b hover:bg-yellow-50 transition ${
-                        i % 2 === 0 ? "bg-gray-50" : ""
-                      }`}
-                      variants={rowVariants}
-                      initial="hidden"
-                      animate="visible"
-                      whileHover="hover"
+                    <motion.tr key={user.id} className={`border-b hover:bg-yellow-50 transition ${i % 2 === 0 ? "bg-gray-50" : ""}`}
+                      variants={rowVariants} initial="hidden" animate="visible" whileHover="hover"
                     >
                       <td className="p-3">
                         {user.qrCode ? (
                           <div className="flex flex-col items-center gap-2">
-                            <img
-  src={user.qrCode.startsWith("data:image") 
-        ? user.qrCode 
-        : `data:image/png;base64,${user.qrCode}`}
-  alt="QR Code"
-  className="w-60 h-60 rounded-lg shadow-lg object-contain"
-/>
-                           <div className="flex gap-2">
-  <button
-    onClick={() => downloadQR(user.qrCode, user.nin)}
-    className="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded"
-  >
-    Download
-  </button>
-
-  <button
-    onClick={() => window.print()}
-    className="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-2 rounded"
-  >
-    Print
-  </button>
-</div>
-
+                            <img src={user.qrCode.startsWith("data:image") ? user.qrCode : `data:image/png;base64,${user.qrCode}`} alt="QR Code"
+                              className="w-60 h-60 rounded-lg shadow-lg object-contain"
+                            />
+                            <div className="flex gap-2">
+                              <button onClick={() => downloadQR(user.qrCode, user.nin)}
+                                className="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded"
+                              >
+                                Download
+                              </button>
+                              <button onClick={() => printUser(user)}
+                                className="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-2 rounded"
+                              >
+                                Print
+                              </button>
+                            </div>
                           </div>
                         ) : (
                           <span className="text-gray-400">No QR</span>
                         )}
                       </td>
                       <td className="p-3">{user.nin}</td>
-                      <td className="p-3 font-semibold">
-                        {user.surname} {user.otherNames}
-                      </td>
+                      <td className="p-3 font-semibold">{user.surname} {user.otherNames}</td>
                       <td className="p-3">{user.phone}</td>
                       <td className="p-3">{user.email}</td>
                       <td className="p-3">{user.gender}</td>
@@ -310,12 +300,8 @@ useEffect(() => {
                         {lastPurchase ? (
                           <span className="text-sm font-semibold">{daysLeft} day(s) left</span>
                         ) : (
-                          <button
-                            onClick={() => handlePurchase(user.id)}
-                            disabled={!canPurchase}
-                            className={`bg-yellow-500 text-white px-3 py-1 rounded font-bold hover:bg-yellow-600 transition ${
-                              !canPurchase ? "opacity-50 cursor-not-allowed" : ""
-                            }`}
+                          <button onClick={() => handlePurchase(user.id)} disabled={!canPurchase}
+                            className={`bg-yellow-500 text-white px-3 py-1 rounded font-bold hover:bg-yellow-600 transition ${!canPurchase ? "opacity-50 cursor-not-allowed" : ""}`}
                           >
                             Purchase
                           </button>
@@ -330,9 +316,25 @@ useEffect(() => {
         )}
       </AnimatePresence>
 
-      {results.length === 0 && !loading && (
-        <p className="text-gray-500 text-center mt-8 text-lg">No users found.</p>
-      )}
+      {results.length === 0 && !loading && <p className="text-gray-500 text-center mt-8 text-lg">No users found.</p>}
+
+      <style jsx global>{`
+        @media print {
+          img {
+            content: normal !important;
+            display: block !important;
+            visibility: visible !important;
+            max-width: none !important;
+            max-height: none !important;
+            width: 240px !important;
+            height: 240px !important;
+          }
+          body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+        }
+      `}</style>
     </div>
   );
 }
