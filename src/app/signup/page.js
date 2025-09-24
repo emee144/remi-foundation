@@ -2,35 +2,25 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
 
 const oyoLGAs = [
   "Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan North",
-  "Ibadan North-East", "Ibadan North-West", "Ibadan South-East",
-  "Ibadan South-West", "Ibarapa Central", "Ibarapa East", "Ibarapa North",
-  "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu",
-  "Ogbomosho North", "Ogbomosho South", "Ogo Oluwa", "Olorunsogo",
-  "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West",
-  "Saki East", "Saki West", "Surulere"
+  "Ibadan North-East", "Ibadan North-West", "Ibadan South-East", "Ibadan South-West",
+  "Ibarapa Central", "Ibarapa East", "Ibarapa North", "Ido", "Irepo", "Iseyin",
+  "Itesiwaju", "Iwajowa", "Kajola", "Lagelu", "Ogbomosho North", "Ogbomosho South",
+  "Ogo Oluwa", "Olorunsogo", "Oluyole", "Ona Ara", "Orelope", "Ori Ire", "Oyo East",
+  "Oyo West", "Saki East", "Saki West", "Surulere"
 ];
 
 const ageRanges = ["21-40", "41-60", "Above 61"];
 
 export default function SignupForm() {
   const [form, setForm] = useState({
-    nin: '',
-    surname: '',
-    otherNames: '',
-    address: '',
-    lga: '',
-    phone: '',
-    gender: 'male',
-    ageRange: '',
-    occupation: '',
-    email: '',
-    password: '',
+    nin: '', surname: '', otherNames: '', address: '', lga: '', phone: '',
+    gender: 'male', ageRange: '', occupation: '', email: '', password: '',
   });
-
-  const [photo, setPhoto] = useState(null); // NEW
+  const [photo, setPhoto] = useState(null);
   const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -58,13 +48,11 @@ export default function SignupForm() {
       setLoading(false);
       return;
     }
-
     if (form.nin.length !== 11) {
       setError('NIN must be exactly 11 digits.');
       setLoading(false);
       return;
     }
-
     if (form.phone.length !== 11) {
       setError('Phone number must be exactly 11 digits.');
       setLoading(false);
@@ -76,22 +64,13 @@ export default function SignupForm() {
       Object.entries(form).forEach(([key, value]) => formData.append(key, value));
       formData.append('photo', photo);
 
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        body: formData,
-      });
-
+      const res = await fetch('/api/signup', { method: 'POST', body: formData });
       const data = await res.json();
 
       if (res.ok) {
         setQrCode(data.qrCode);
-
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 2000);
-      } else {
-        setError(data.error);
-      }
+        setTimeout(() => { window.location.href = '/login'; }, 2000);
+      } else setError(data.error);
     } catch (err) {
       setError('Signup failed. Try again.');
       console.error(err);
@@ -109,7 +88,13 @@ export default function SignupForm() {
         className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md"
       >
         <div className="flex flex-col items-center mb-6">
-          <img src="/remilogo.jpeg" alt="Remi Foundation Logo" className="w-24 h-24 mb-2 rounded-full shadow-lg" />
+          <Image 
+            src="/remilogo.jpeg" 
+            alt="Remi Foundation Logo" 
+            width={96} 
+            height={96} 
+            className="mb-2 rounded-full shadow-lg" 
+          />
           <h2 className="text-3xl font-bold text-green-900">Remi Foundation</h2>
         </div>
 
@@ -175,12 +160,29 @@ export default function SignupForm() {
         {error && <p className="mt-4 text-red-600 font-semibold">{error}</p>}
 
         {qrCode && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-            className="mt-6 text-center">
-            <h3 className="text-xl font-bold text-green-900 mb-2">Your QR Code</h3>
-            <img src={qrCode} alt="Your QR code" className="mx-auto w-48 h-48 rounded-xl shadow-lg" />
-          </motion.div>
-        )}
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }} 
+    animate={{ opacity: 1, y: 0 }} 
+    transition={{ duration: 0.6 }}
+    className="mt-6 text-center"
+  >
+    <h2 className="text-2xl font-bold text-green-900 mb-2">
+      Remi Oseni Foundation
+    </h2>
+    <h3 className="text-lg font-semibold text-green-800 mb-4">
+      Your QR Code
+    </h3>
+    <Image 
+      src={qrCode} 
+      alt="Your QR code" 
+      width={192} 
+      height={192} 
+      unoptimized={true} 
+      className="mx-auto rounded-xl shadow-lg" 
+    />
+  </motion.div>
+)}
+
       </motion.div>
     </div>
   );

@@ -1,7 +1,8 @@
 import { Sequelize, DataTypes } from "sequelize";
-import sequelize from "../sequelize"; // your sequelize instance
+import { sequelize } from "./User"; // import named sequelize instance
 import { User } from "./User";
 
+// Define Purchase model
 export const Purchase = sequelize.define(
   "purchases",
   {
@@ -10,8 +11,8 @@ export const Purchase = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: User,      // reference User model
-        key: "id",        // column in User table
+        model: User,
+        key: "id",
       },
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
@@ -28,6 +29,6 @@ export const Purchase = sequelize.define(
   }
 );
 
-// Setup association
+// Setup associations
 User.hasMany(Purchase, { foreignKey: "userId", as: "purchases" });
 Purchase.belongsTo(User, { foreignKey: "userId" });

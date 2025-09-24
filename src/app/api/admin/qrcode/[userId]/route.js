@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import User from "@/lib/models/User";
-import Purchase from "@/lib/models/Purchase"; 
+import { User } from "@/lib/models/User";
+import { Purchase } from '@/lib/models/Purchase'; // ✅ matches export
 
 export async function POST(req, { params }) {
   try {

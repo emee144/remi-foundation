@@ -25,13 +25,11 @@ export default function AdminPage() {
     }
   };
 
-  // Admin logout
   const handleLogout = () => {
     setAccess(false);
     setPassword("");
   };
 
-  // Fetch users from API
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -51,7 +49,6 @@ export default function AdminPage() {
     if (access) fetchUsers();
   }, [access]);
 
-  // Search functionality
   const handleSearch = async () => {
     if (!query.trim()) {
       setResults(allUsers);
@@ -71,7 +68,6 @@ export default function AdminPage() {
     }
   };
 
-  // Purchase creation
   const handlePurchase = async (userId) => {
     try {
       const res = await fetch("/api/admin/purchase", {
@@ -92,7 +88,6 @@ export default function AdminPage() {
     }
   };
 
-  // Calculate days left
   const getDaysLeft = (purchaseDate, userId) => {
     const now = new Date();
     let storedDate = localStorage.getItem(`purchaseDate_${userId}`);
@@ -156,19 +151,14 @@ export default function AdminPage() {
               text-align: center;
               page-break-inside: avoid;
             }
-            img {
-              width: 200px;
-              height: 200px;
-              display: block;
-              margin: 0 auto 20px auto;
-            }
             p, h1 { margin: 5px 0; }
           </style>
         </head>
         <body>
           <div class="container">
             <h1>Remi Oseni Foundation</h1>
-            <img src="${user.qrCode.startsWith("data:image") ? user.qrCode : `data:image/png;base64,${user.qrCode}`}" alt="QR Code" />
+            <img src="${user.qrCode.startsWith("data:image") ? user.qrCode : `data:image/png;base64,${user.qrCode}`}" 
+                 alt="QR Code" width="200" height="200" style="display:block; margin: 0 auto 20px auto;" />
             <p><strong>NIN:</strong> ${user.nin}</p>
             <p><strong>Name:</strong> ${user.surname} ${user.otherNames}</p>
             <p><strong>Phone:</strong> ${user.phone}</p>
@@ -184,7 +174,6 @@ export default function AdminPage() {
     printWindow.close();
   };
 
-  // Login screen
   if (!access) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-yellow-50 via-green-50 to-yellow-100 px-4">
@@ -206,10 +195,8 @@ export default function AdminPage() {
     );
   }
 
-  // Admin panel
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      {/* Header with logo + shifted logout */}
       <div className="flex justify-between items-start mb-6">
         <div className="flex flex-col items-center">
           <Image src="/remilogo.jpeg" alt="Remi Logo" width={120} height={120} className="mb-4"/>
@@ -227,7 +214,6 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {/* Search */}
       <motion.div className="flex flex-col md:flex-row gap-4 mb-6 justify-center"
         initial="hidden" animate="visible" variants={sectionVariants}
       >
@@ -242,7 +228,6 @@ export default function AdminPage() {
       {loading && <p className="text-gray-600 text-center">Loading...</p>}
       {searchError && <p className="text-red-500 text-center">{searchError}</p>}
 
-      {/* Users Table */}
       <AnimatePresence>
         {results.length > 0 && (
           <motion.div className="overflow-x-auto mt-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -271,8 +256,13 @@ export default function AdminPage() {
                       <td className="p-3">
                         {user.qrCode ? (
                           <div className="flex flex-col items-center gap-2">
-                            <img src={user.qrCode.startsWith("data:image") ? user.qrCode : `data:image/png;base64,${user.qrCode}`} alt="QR Code"
-                              className="w-60 h-60 rounded-lg shadow-lg object-contain"
+                            <Image 
+                              src={user.qrCode.startsWith("data:image") ? user.qrCode : `data:image/png;base64,${user.qrCode}`} 
+                              alt="QR Code"
+                              width={240}
+                              height={240}
+                              unoptimized={true}
+                              className="rounded-lg shadow-lg object-contain"
                             />
                             <div className="flex gap-2">
                               <button onClick={() => downloadQR(user.qrCode, user.nin)}
@@ -321,11 +311,7 @@ export default function AdminPage() {
       <style jsx global>{`
         @media print {
           img {
-            content: normal !important;
             display: block !important;
-            visibility: visible !important;
-            max-width: none !important;
-            max-height: none !important;
             width: 240px !important;
             height: 240px !important;
           }

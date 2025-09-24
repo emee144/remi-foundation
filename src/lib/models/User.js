@@ -1,7 +1,8 @@
 import { Sequelize, DataTypes } from "sequelize";
 import mysql2 from "mysql2"; // explicitly import mysql2
 
-const sequelize = new Sequelize(
+// Initialize Sequelize
+export const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASS,
@@ -31,13 +32,10 @@ export const User = sequelize.define(
     email: { type: DataTypes.STRING, unique: true, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
     profilePicture: { type: DataTypes.BLOB("long"), allowNull: true },
-    qrCode: {type: DataTypes.TEXT('long'), allowNull: true },
-
+    qrCode: { type: DataTypes.TEXT("long"), allowNull: true },
   },
   {
     timestamps: true,
     freezeTableName: true,
   }
 );
-
-export default sequelize;
