@@ -1,10 +1,19 @@
 // app/eligibility/page.js
+import Image from "next/image";
+
 export default function EligibilityPage() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-yellow-100 via-green-50 to-yellow-100 py-12 px-6">
       <div className="max-w-6xl mx-auto space-y-16">
-        {/* Top Branding */}
-        <div className="text-center">
+        {/* Top Branding with Logo */}
+        <div className="text-center flex flex-col items-center">
+          <Image
+            src="/remilogo.jpeg"
+            alt="Remi Oseni Foundation Logo"
+            width={100}
+            height={100}
+            className="rounded-full shadow-md mb-4"
+          />
           <h1 className="text-4xl font-extrabold text-green-800 drop-shadow-md tracking-wide">
             Remi Oseni Foundation
           </h1>
@@ -20,7 +29,8 @@ export default function EligibilityPage() {
           </h1>
           <div className="mt-2 w-32 h-1 bg-green-500 mx-auto rounded-full shadow-md"></div>
           <p className="text-gray-700 text-lg mt-6 max-w-2xl mx-auto">
-            To participate in our food distribution program, please review the requirements below.
+            To participate in our food distribution program, please review the
+            requirements below.
           </p>
         </div>
 
@@ -30,7 +40,9 @@ export default function EligibilityPage() {
             Eligibility Criteria
           </h2>
 
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Personal Requirements</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-3">
+            Personal Requirements
+          </h3>
           <ul className="list-disc pl-6 text-gray-700 space-y-2">
             <li>Valid Nigerian National Identification Number (NIN)</li>
             <li>Age 25 years and above</li>
@@ -38,7 +50,9 @@ export default function EligibilityPage() {
             <li>Valid phone number for notifications</li>
           </ul>
 
-          <h3 className="text-xl font-semibold text-gray-800 mt-8 mb-3">Program Rules</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mt-8 mb-3">
+            Program Rules
+          </h3>
           <ul className="list-disc pl-6 text-gray-700 space-y-2">
             <li>One purchase per household every 30 days</li>
             <li>Valid NIN slip required at pickup</li>
@@ -54,7 +68,8 @@ export default function EligibilityPage() {
           </h2>
           <div className="mt-2 w-32 h-1 bg-green-500 mx-auto rounded-full shadow-md"></div>
           <p className="text-gray-700 text-lg mt-4 max-w-2xl mx-auto">
-            Convenient pickup locations across Ibadan with flexible scheduling to serve you better.
+            Convenient pickup locations across Ibadan with flexible scheduling to
+            serve you better.
           </p>
         </div>
 
@@ -93,13 +108,6 @@ export default function EligibilityPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center mt-16">
-          <button className="bg-gradient-to-r from-yellow-400 to-green-600 text-white px-10 py-5 rounded-xl text-lg font-bold shadow-lg transform transition hover:-translate-y-2 hover:shadow-2xl hover:scale-105">
-            ✅ Check Your Eligibility
-          </button>
         </div>
       </div>
     </div>

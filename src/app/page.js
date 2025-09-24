@@ -26,7 +26,6 @@ export default function Home() {
       {/* Navbar */}
       <header className="flex flex-col md:flex-row justify-between items-center px-8 py-6 bg-white shadow-md">
         <div className="flex items-center mb-4 md:mb-0">
-          {/* Logo Image */}
           <Image
             src="/remilogo.jpeg"
             alt="Remi Logo"
@@ -63,44 +62,61 @@ export default function Home() {
           </button>
         </div>
       </header>
-     
+
       {/* Hero Section */}
       <main className="flex flex-col md:flex-row items-center justify-between px-8 py-20 flex-grow">
-        <div className="max-w-2xl">
-          <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4">
-            <span className="text-white-700">Welcome to Remi Oseni Foundation</span>
-          </h1>
-          <p className="mt-4 text-black-700 text-lg md:text-xl">
-            Empowering youth and families through food support and community programs in Ibadan, Oyo State.
-          </p>
+        <motion.div
+          className="max-w-2xl"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={sectionVariants}
+        >
+        <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4">
+  <span className="text-white">
+    Welcome to Remi Oseni Foundation
+  </span>
+</h1>
+
+<p className="mt-4 text-white text-lg md:text-xl">
+  Empowering youth and families through food support and community
+  programs in Ibadan, Oyo State.
+</p>
+
 
           <div className="mt-8 flex gap-6">
             <button
               onClick={handleSignup}
-              className="bg-yellow-600 text-black-800 px-8 py-4 rounded-lg shadow-lg hover:bg-green-600 transition"
+              className="bg-orange-500 text-white px-8 py-4 rounded-lg shadow-lg hover:bg-green-600 transition"
             >
               Get Started Today
             </button>
             <button
-              onClick={() => {}}
-              className="bg-orange-500 text-black-800 border px-8 py-4 rounded-lg hover:bg-gray-400 transition"
+              onClick={() => router.push("/products")}
+              className="bg-orange-500 text-white border px-8 py-4 rounded-lg hover:bg-gray-400 transition"
             >
               View Products
             </button>
           </div>
 
-          <p className="mt-4 text-black-700">
+          <p className="mt-4 text-white">
             Already signed up?{" "}
             <span
               onClick={handleLogin}
-              className="text-white-800 font-semibold cursor-pointer hover:underline"
+              className="text-white font-semibold cursor-pointer hover:underline"
             >
               Login here
             </span>
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mt-12 md:mt-0 relative w-full max-w-lg flex justify-center">
+        <motion.div
+          className="mt-12 md:mt-0 relative w-full max-w-lg flex justify-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={sectionVariants}
+        >
           <div className="w-[420px] h-[420px] bg-gradient-to-r from-orange-300 to-yellow-200 rounded-full flex items-center justify-center shadow-2xl overflow-hidden group animate-pulse-slow">
             <Image
               src="/remi.webp"
@@ -110,75 +126,172 @@ export default function Home() {
               className="rounded-full object-cover transform transition-transform duration-700 group-hover:scale-110 group-hover:rotate-3"
             />
           </div>
-        </div>
+        </motion.div>
       </main>
-      
+
+      {/* Impact Section */}
+      <section className="bg-white py-16 px-8 text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-orange-600 mb-12">
+          Our Impact
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {[
+            { number: "10,000+", label: "Meals Provided" },
+            { number: "2,500+", label: "Families Supported" },
+            { number: "500+", label: "Active Volunteers" },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              className="p-6 bg-gray-50 rounded-2xl shadow-md hover:shadow-xl transition"
+            >
+              <p className="text-4xl font-extrabold text-green-600">
+                {stat.number}
+              </p>
+              <p className="mt-2 text-lg font-medium text-gray-700">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Programs Section - orange background */}
+      <section className="bg-orange-500 text-white py-16 px-8">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          Our Programs
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {[
+            {
+              title: "Food Support",
+              desc: "Providing nutritious meals for families in need.",
+              img: "/food.jpeg",
+            },
+            {
+              title: "Youth Empowerment",
+              desc: "Skill-building workshops and mentorship for young people.",
+              img: "/youth.jpeg",
+            },
+            {
+              title: "Community Development",
+              desc: "Initiatives that strengthen and uplift local communities.",
+              img: "/community.png",
+            },
+          ].map((program, i) => (
+            <div
+              key={i}
+              className="bg-white text-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition p-6 text-center"
+            >
+              <Image
+                src={program.img}
+                alt={program.title}
+                width={400}
+                height={250}
+                className="rounded-xl mx-auto mb-4 object-cover"
+              />
+              <h3 className="text-xl font-bold">{program.title}</h3>
+              <p className="mt-2">{program.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="bg-orange-500 text-white py-16 px-8">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          What People Say
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {[
+            {
+              quote:
+                "The Remi Oseni Foundation changed my life. I can now provide food for my children.",
+              name: "Grace A.",
+              role: "Beneficiary",
+            },
+            {
+              quote:
+                "Being part of ROFBL has changed my life. Their support gave me hope, food, and opportunities I never thought possible.",
+              name: "Tunde O.",
+              role: "Beneficiary",
+            },
+          ].map((t, i) => (
+            <div
+              key={i}
+              className="p-6 bg-white text-gray-800 rounded-2xl shadow-md hover:shadow-lg transition"
+            >
+              <p className="italic mb-4">“{t.quote}”</p>
+              <p className="font-semibold text-orange-600">{t.name}</p>
+              <p className="text-sm text-gray-500">{t.role}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Vision, Mission, Core Values Section */}
       <section className="bg-gradient-to-r from-yellow-50 via-green-50 to-yellow-100 px-8 py-16 text-gray-800">
         <div className="max-w-7xl mx-auto space-y-12">
           <motion.div
-  className="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-yellow-500"
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true }}
-  variants={sectionVariants}
->
-  <h2 className="text-3xl font-bold text-yellow-600 mb-8 text-center">
-    CORE VALUES
-  </h2>
+            className="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-yellow-500"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={sectionVariants}
+          >
+            <h2 className="text-3xl font-bold text-yellow-600 mb-8 text-center">
+              CORE VALUES
+            </h2>
 
-  {/* Cards Grid */}
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {[
-      {
-        title: "INTEGRITY",
-        desc: "Upholding honesty, transparency, and accountability in all endeavors.",
-        color: "border-orange-500",
-      },
-      {
-        title: "COMPASSION",
-        desc: "Serving with empathy and love for the poor, needy, and vulnerable.",
-        color: "border-pink-500",
-      },
-      {
-        title: "EQUITY & JUSTICE",
-        desc: "Ensuring fairness, equality, and the defense of human rights.",
-        color: "border-green-500",
-      },
-      {
-        title: "EMPOWERMENT",
-        desc: "Equipping individuals and communities with skills and opportunities for self-reliance.",
-        color: "border-blue-500",
-      },
-      {
-        title: "SERVICE TO HUMANITY",
-        desc: "Dedicating efforts to initiatives that improve lives, families, and communities.",
-        color: "border-purple-500",
-      },
-      {
-        title: "EXCELLENCE",
-        desc: "Delivering impactful programs with professionalism and measurable results.",
-        color: "border-yellow-500",
-      },
-      {
-        title: "PEACE & LEADERSHIP",
-        desc: "Promoting peaceful coexistence, good governance, and leadership development.",
-        color: "border-red-500",
-      },
-    ].map((value, i) => (
-      <div
-        key={i}
-        className={`p-6 bg-white rounded-2xl shadow-lg border-t-4 ${value.color} hover:shadow-2xl hover:-translate-y-2 transition-transform`}
-      >
-        <h3 className="text-xl font-bold text-gray-800 mb-3">
-          {value.title}
-        </h3>
-        <p className="text-gray-600">{value.desc}</p>
-      </div>
-    ))}
-  </div>
-</motion.div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "INTEGRITY",
+                  desc: "Upholding honesty, transparency, and accountability in all endeavors.",
+                  color: "border-orange-500",
+                },
+                {
+                  title: "COMPASSION",
+                  desc: "Serving with empathy and love for the poor, needy, and vulnerable.",
+                  color: "border-pink-500",
+                },
+                {
+                  title: "EQUITY & JUSTICE",
+                  desc: "Ensuring fairness, equality, and the defense of human rights.",
+                  color: "border-green-500",
+                },
+                {
+                  title: "EMPOWERMENT",
+                  desc: "Equipping individuals and communities with skills and opportunities for self-reliance.",
+                  color: "border-blue-500",
+                },
+                {
+                  title: "SERVICE TO HUMANITY",
+                  desc: "Dedicating efforts to initiatives that improve lives, families, and communities.",
+                  color: "border-purple-500",
+                },
+                {
+                  title: "EXCELLENCE",
+                  desc: "Delivering impactful programs with professionalism and measurable results.",
+                  color: "border-yellow-500",
+                },
+                {
+                  title: "PEACE & LEADERSHIP",
+                  desc: "Promoting peaceful coexistence, good governance, and leadership development.",
+                  color: "border-red-500",
+                },
+              ].map((value, i) => (
+                <div
+                  key={i}
+                  className={`p-6 bg-white rounded-2xl shadow-lg border-t-4 ${value.color} hover:shadow-2xl hover:-translate-y-2 transition-transform`}
+                >
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600">{value.desc}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
           <motion.div
             className="text-center mt-8"
@@ -187,8 +300,12 @@ export default function Home() {
             viewport={{ once: true }}
             variants={sectionVariants}
           >
-            <p className="text-2xl font-bold text-orange-500">ROFBL......Humanity First</p>
-            <p className="text-2xl font-bold text-orange-500">ROFBL......Asoludero !!!!</p>
+            <p className="text-2xl font-bold text-orange-500">
+              ROFBL......Humanity First
+            </p>
+            <p className="text-2xl font-bold text-orange-500">
+              ROFBL......Asoludero !!!!
+            </p>
           </motion.div>
         </div>
       </section>
@@ -197,12 +314,12 @@ export default function Home() {
       <footer className="bg-gray-600 px-8 py-6 flex flex-col md:flex-row justify-between items-center shadow-md">
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4 md:mb-0">
           <Link href="/location">
-            <div className="px-5 py-3 bg-yellow-600 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
+            <div className="px-5 py-3 bg-orange-500 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
               Locations
             </div>
           </Link>
           <Link href="/contact">
-            <div className="px-5 py-3 bg-yellow-600 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
+            <div className="px-5 py-3 bg-orange-500 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
               Contact Us
             </div>
           </Link>
@@ -218,8 +335,13 @@ export default function Home() {
 
       <style jsx>{`
         @keyframes pulse-slow {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
         }
         .animate-pulse-slow {
           animation: pulse-slow 6s infinite;
