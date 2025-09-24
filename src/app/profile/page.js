@@ -75,6 +75,18 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-100 to-gray-50 flex flex-col items-center px-4 pt-12">
+      {/* Foundation Header */}
+      <div className="flex flex-col items-center mb-6">
+        <Image
+          src="/remilogo.jpeg"
+          alt="Remi Foundation Logo"
+          width={96}
+          height={96}
+          className="mb-2 rounded-full shadow-lg"
+        />
+        <h2 className="text-3xl font-bold text-green-900">Remi Oseni Foundation</h2>
+      </div>
+
       <h1 className="text-4xl font-extrabold text-green-700 mb-8">My Profile</h1>
 
       <div className="flex flex-col items-center gap-8 bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">

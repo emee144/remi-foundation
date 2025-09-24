@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function ApplicationsPage() {
   const [purchases, setPurchases] = useState([]);
@@ -51,7 +52,19 @@ export default function ApplicationsPage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Applications</h1>
+      {/* Foundation Header */}
+      <div className="flex flex-col items-center mb-6">
+        <Image
+          src="/remilogo.jpeg"
+          alt="Remi Foundation Logo"
+          width={96}
+          height={96}
+          className="mb-2 rounded-full shadow-lg"
+        />
+        <h2 className="text-3xl font-bold text-green-900">Remi Oseni Foundation</h2>
+      </div>
+
+      <h1 className="text-2xl font-bold mb-6 text-center">Applications</h1>
 
       {error && (
         <p className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">{error}</p>
@@ -78,9 +91,7 @@ export default function ApplicationsPage() {
                   Status: {p.status || "Completed"}
                 </p>
                 <p className="text-yellow-600 font-semibold mt-1">
-                  {daysLeft > 0
-                    ? `${daysLeft} day(s) left`
-                    : "Expired"}
+                  {daysLeft > 0 ? `${daysLeft} day(s) left` : "Expired"}
                 </p>
               </div>
             );
