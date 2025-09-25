@@ -311,27 +311,35 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-600 px-8 py-6 flex flex-col md:flex-row justify-between items-center shadow-md">
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4 md:mb-0">
-          <Link href="/location">
-            <div className="px-5 py-3 bg-orange-500 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
-              Locations
-            </div>
-          </Link>
-          <Link href="/contact">
-            <div className="px-5 py-3 bg-orange-500 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
-              Contact Us
-            </div>
-          </Link>
-        </div>
+      {/* Footer */}
+<footer className="bg-gray-600 px-8 py-6 flex flex-col md:flex-row justify-between items-center shadow-md">
+  <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4 md:mb-0">
+    <Link href="/location">
+      <div className="px-5 py-3 bg-orange-500 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
+        Locations
+      </div>
+    </Link>
+    <Link href="/contact">
+      <div className="px-5 py-3 bg-orange-500 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
+        Contact Us
+      </div>
+    </Link>
+  </div>
 
-        <div className="px-5 py-3 bg-white shadow-md rounded-lg text-gray-700">
-          <p className="font-semibold">Contact Info</p>
-          <p>+234 801 234 0000</p>
-          <p>Ibadan, Oyo State, Nigeria</p>
-          <p>Email: info@remiosenifoundation.org</p>
-        </div>
-      </footer>
+  {/* Copyright */}
+  <div className="text-white font-ibold mt-4 md:mt-0">
+    &copy; 2025 Remi Oseni Foundation. All rights reserved.
+  </div>
+  
+  <div className="px-5 py-3 bg-white shadow-md rounded-lg text-gray-700 mb-4 md:mb-0">
+    <p className="font-semibold">Contact Info</p>
+    <p>+234 801 234 0000</p>
+    <p>Ibadan, Oyo State, Nigeria</p>
+    <p>Email: info@remiosenifoundation.org</p>
+  </div>
+
+</footer>
+
 
       <style jsx>{`
         @keyframes pulse-slow {

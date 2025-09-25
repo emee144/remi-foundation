@@ -30,8 +30,11 @@ export default function ContactPage() {
         <Image
     src="/remilogo.jpeg"
     alt="Remi Foundation Logo"
-    className="w-28 h-28 mx-auto mb-6 object-contain"
-  />
+    width={112}      // 28 * 4 (Tailwind w-28)
+    height={112}     // 28 * 4 (Tailwind h-28)
+    className="mx-auto mb-6 object-contain"
+/>
+
       {/* Header */}
       <h1 className="text-5xl font-extrabold text-center mb-12 text-green-800 drop-shadow-lg">
         📍 Contact & Locations
@@ -151,16 +154,7 @@ export default function ContactPage() {
           </div>
         </form>
       </div>
-
-      {/* Footer */}
-      <div className="mt-20 text-center text-gray-600">
-        <p className="font-semibold text-green-700 mb-2">Remi Oseni Foundation</p>
-        <p>
-          For Better Life and Youth Empowerment | Affordable food & youth
-          programs for families in Ibadan and Ido
-        </p>
-        <p className="mt-4 text-sm">© 2025 Remi Oseni Foundation. All rights reserved.</p>
-      </div>
+    
     </div>
   );
 }
