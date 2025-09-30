@@ -1,27 +1,11 @@
 {
 
-  "development": {
-    "username": "root",
-    "password": "pNGPnrzripHsAMOtUoVetjrLssmYkiSy",
-    "database": "remiosen_remi",
-    "host": "centerbeam.proxy.rlwy.net",
-    "port": 23216,
-    "dialect": "mysql"
-  },
+"production": {
+  "username": "${DB_USER}",
+  "password": "${DB_PASS}",
+  "database": "${DB_NAME}",
+  "host": "${DB_HOST}",
+  "dialect": "mysql"
+}
 
-
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "remiosen_remi",
-    "password": "Kokoman61",
-    "database": "remiosen_remi",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
 }

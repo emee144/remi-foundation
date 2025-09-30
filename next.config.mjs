@@ -2,6 +2,8 @@ import path from "path";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+
   webpack: (config, { isServer }) => {
     // Keep your existing alias
     config.resolve.alias = {

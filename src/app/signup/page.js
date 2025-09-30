@@ -104,16 +104,35 @@ export default function SignupForm() {
           <input type="text" name="phone" placeholder="Phone (11 digits)" value={form.phone} onChange={handleChange} required
             className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors" />
 
-          {['surname','otherNames','address','occupation','email'].map(field => (
-            <input key={field} type="text" name={field} placeholder={field} value={form[field]} onChange={handleChange} required
-              className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors" />
-          ))}
+          {['surname','otherNames','address','occupation','email'].map(field => {
+  const labels = {
+    surname: "Surname",
+    otherNames: "Other Names",
+    address: "Address",
+    occupation: "Occupation",
+    email: "Email"
+  };
+
+  return (
+    <input
+      key={field}
+      type="text"
+      name={field}
+      placeholder={labels[field]}
+      value={form[field]}
+      onChange={handleChange}
+      required
+      className="w-full p-3 rounded-xl border-2 border-green-400 focus:outline-none focus:border-yellow-500 transition-colors"
+    />
+  );
+})}
+
 
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
               name="password"
-              placeholder="password"
+              placeholder="Password"
               value={form.password}
               onChange={handleChange}
               required
@@ -153,7 +172,7 @@ export default function SignupForm() {
           <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             type="submit" disabled={loading}
             className="w-full bg-green-500 hover:bg-yellow-400 text-white font-bold py-3 rounded-xl shadow-lg transition-colors">
-            {loading ? 'Signing up...' : 'Signup'}
+            {loading ? 'Signing up...' : 'Sign up'}
           </motion.button>
         </form>
 

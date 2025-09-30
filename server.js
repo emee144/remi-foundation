@@ -1,11 +1,9 @@
-// server.js
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
 
-// Detect environment
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
+const app = next({ dev, conf: { basePath: "/remi-foundation" } });
 const handle = app.getRequestHandler();
 
 const port = process.env.PORT || 3000;
