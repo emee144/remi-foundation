@@ -6,37 +6,29 @@ import Image from "next/image";
 
 export default function Location() {
   const locations = [
-    {
-      name: "Bodija Market Center",
-      address: "15 Bodija Market Road, Bodija, Ibadan",
-      phone: "08012345678",
-      hours: [
-        "Mon-Fri: 8AM-5PM",
-        "Saturday: 9AM-2PM",
-        "Sunday: Closed",
-      ],
-    },
-    {
-      name: "UI Gate Distribution Point",
-      address: "25 University of Ibadan Gate, Sango, Ibadan",
-      phone: "08012345679",
-      hours: [
-        "Mon-Fri: 8AM-5PM",
-        "Saturday: 9AM-2PM",
-        "Sunday: Closed",
-      ],
-    },
-    {
-      name: "Challenge Community Center",
-      address: "45 Challenge Main Road, Challenge, Ibadan",
-      phone: "08012345680",
-      hours: [
-        "Mon-Fri: 8AM-5PM",
-        "Saturday: Closed",
-        "Sunday: Closed",
-      ],
-    },
-  ];
+  {
+    name: "Ibadan Office",
+    address:
+      "REMI OSENI HOUSE, Carpenter Bus Stop, beside Vanguard Pharmacy, Ologuneru Eruwa Road, Ologuneru, Ibadan.",
+    phone: ["08086107144", "09051824664"],
+    hours: [
+      "Mon-Fri: 9AM-4PM",
+      "Saturday: 10AM-3PM",
+      "Sunday: Closed",
+    ],
+  },
+  {
+    name: "Contact Us (Lagos Office)",
+    address:
+      "13, Ajanaku Street, Opebi-Allen, Salvation Bus Stop, Lagos State, Nigeria.",
+    phone: ["+2348033040237", "+2348065126192", "+2348038398813"],
+    hours: [
+      "Mon-Fri: 9AM-4PM",
+      "Saturday: 10AM-3PM",
+      "Sunday: Closed",
+    ],
+  },
+];
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-green-50 via-yellow-50 to-green-100 p-8">

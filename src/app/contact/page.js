@@ -8,13 +8,11 @@ export default function ContactPage() {
     {
       title: "Eruwa town distribution point",
       address: "Upcoming",
-      phone: ["08067542314"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
     {
       title: "Omo Adio distribution point",
       address: "Upcoming",
-      phone: ["08012345679"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
     {
@@ -103,7 +101,7 @@ export default function ContactPage() {
             <p className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left">
               Ibadan, Oyo State, Nigeria
             </p>
-            <p className="text-sm text-gray-500">Mon-Fri 8AM-5PM</p>
+            <p className="text-sm text-gray-500">Mon-Fri 9AM-4PM</p>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition">
