@@ -91,12 +91,7 @@ export default function Home() {
             >
               Get Started Today
             </button>
-            <button
-              onClick={() => router.push("/products")}
-              className="bg-orange-500 text-white border px-8 py-4 rounded-lg hover:bg-gray-400 transition"
-            >
-              View Products
-            </button>
+           
           </div>
 
           <p className="mt-4 text-white">
@@ -334,7 +329,7 @@ export default function Home() {
   
   <div className="px-5 py-3 bg-white shadow-md rounded-lg text-gray-700 mb-4 md:mb-0">
     <p className="font-semibold">Contact Info</p>
-    <p>+234 801 234 0000</p>
+    <p>08086107144</p>
     <p>Ibadan, Oyo State, Nigeria</p>
     <p>Email: info@remiosenifoundation.org</p>
   </div>
