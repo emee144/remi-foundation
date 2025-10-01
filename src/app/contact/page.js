@@ -6,22 +6,22 @@ import Image from "next/image";
 export default function ContactPage() {
   const centers = [
     {
-      title: "Bodija Market Center",
-      address: "15 Bodija Market Road, Bodija, Ibadan",
+      title: "Eruwa town distribution point",
+      address: "15 Eruwa, Oyo State",
       phone: ["08067542314"],
-      hours: ["Mon-Fri: 8AM-5PM", "Saturday: 9AM-2PM", "Sunday: Closed"],
+      hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
     {
-      title: "UI Gate Distribution Point",
-      address: "25 University of Ibadan Gate, Sango, Ibadan",
+      title: "Omo Adio distribution point",
+      address: "25 Omi Adio, Ibadan",
       phone: ["08012345679"],
-      hours: ["Mon-Fri: 8AM-5PM", "Saturday: 9AM-2PM", "Sunday: Closed"],
+      hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
     {
       title: "Ologuneru Center",
       address: "Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru, Ibadan",
       phone: ["09051824664", "08086107144"],
-      hours: ["Mon-Fri: 8AM-5PM", "Saturday: Closed", "Sunday: Closed"],
+      hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
   ];
 
@@ -78,7 +78,7 @@ export default function ContactPage() {
               📞 Phone Support
             </h3>
             <p className="text-green-700 font-bold text-2xl flex items-center gap-2">
-              +234 806 754 2198
+              09051824664
             </p>
             <p className="text-sm text-gray-500">Mon-Fri 8AM-5PM</p>
           </div>
