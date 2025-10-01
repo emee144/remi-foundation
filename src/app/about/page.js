@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const sections = [
   {
-    title: "Our Foundation",
+    title: "Our Program",
     content: `Remi Oseni Foundation for Better Life & Youth Empowerment was founded and incorporated by Engr. Aderemi Oseni – The man made by the grace of God for service to humanity. As a humanitarian, philanthropist, and social crusader, he promotes the welfare of others by generously donating his resources, time, talent, and skills to create a better world. He stands as the voice and eyes of human dignity, alleviating the poverty of widows, orphans, youth, and women.`,
   },
   {

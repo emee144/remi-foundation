@@ -80,7 +80,7 @@ export default function ContactPage() {
             <p className="text-green-700 font-bold text-2xl flex items-center gap-2">
               09051824664
             </p>
-            <p className="text-sm text-gray-500">Mon-Fri 8AM-5PM</p>
+            <p className="text-sm text-gray-500">Mon-Fri 9AM-4PM</p>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition">
@@ -88,10 +88,10 @@ export default function ContactPage() {
               📧 Email Support
             </h3>
             <a
-              href="mailto:support@remiosenifoundation.org"
+              href="mailto:remiosenifoundationibadan@gmail.com"
               className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left"
             >
-              support@remiosenifoundation.org
+              remiosenifoundationibadan@gmail.com
             </a>
             <p className="text-sm text-gray-500">Response within 24 hours</p>
           </div>
@@ -111,7 +111,7 @@ export default function ContactPage() {
               🚨 Emergency Contact
             </h3>
             <a
-              href="mailto:support@remiosenifoundation.org"
+              href="mailto:remiosenifoundationibadan@gmail.com"
               className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left"
             >
               support@remiosenifoundation.org

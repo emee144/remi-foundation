@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { title } from "process";
 
 export default function Home() {
   const router = useRouter();
 
   const navLinks = [
-    { name: "About", href: "/about" },
+    { name: "About Us", href: "/about" },
     { name: "Eligibility", href: "/eligibility" },
   ];
 
@@ -34,7 +35,7 @@ export default function Home() {
             className="mr-3"
           />
           <div className="text-2xl md:text-3xl font-bold text-orange-600">
-            Remi Oseni Foundation
+            Remi Oseni Foundation <br/>For Better Life and Youth Empowerment<br/>RC 167162
           </div>
         </div>
 
@@ -152,45 +153,62 @@ export default function Home() {
       </section>
 
       {/* Programs Section - orange background */}
-      <section className="bg-orange-500 text-white py-16 px-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          Our Programs
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {[
-            {
-              title: "Food Support",
-              desc: "Providing nutritious meals for families in need.",
-              img: "/food.jpeg",
-            },
-            {
-              title: "Youth Empowerment",
-              desc: "Skill-building workshops and mentorship for young people.",
-              img: "/youth.jpeg",
-            },
-            {
-              title: "Community Development",
-              desc: "Initiatives that strengthen and uplift local communities.",
-              img: "/community.png",
-            },
-          ].map((program, i) => (
-            <div
-              key={i}
-              className="bg-white text-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition p-6 text-center"
-            >
-              <Image
-                src={program.img}
-                alt={program.title}
-                width={400}
-                height={250}
-                className="rounded-xl mx-auto mb-4 object-cover"
-              />
-              <h3 className="text-xl font-bold">{program.title}</h3>
-              <p className="mt-2">{program.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+     <section className="bg-orange-500 text-white py-16 px-8">
+  <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+    Our Programs
+  </h2>
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+    {[
+      {
+        title: "Rice",
+        desc: "Nutritious rice to help fight hunger",
+        img: "/rice.jpeg",
+      },
+      {
+        title: "Vegetable Oil",
+        desc: "High-quality cooking oil for families in need.",
+        img: "/oil.jpeg",
+      },
+      {
+  title: "Garri",
+  desc: "Essential garri to support families with daily meals.",
+  img: "/garri.jpeg",
+},
+
+      {
+        title: "Palm Oil",
+        desc: "Essential palm oil to support household meals.",
+        img: "/palmoil.jpeg",
+      },
+      {
+        title: "Beans",
+        desc: "Nutritious beans to help fight hunger.",
+        img: "/beans.jpeg",
+      },
+      {
+        title: "Spaghetti",
+        desc: "Affordable and filling spaghetti packs.",
+        img: "/spaghetti.jpeg",
+      },
+    ].map((program, i) => (
+      <div
+        key={i}
+        className="bg-white text-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition p-6 text-center"
+      >
+        <Image
+          src={program.img}
+          alt={program.title}
+          width={400}
+          height={250}
+          className="rounded-xl mx-auto mb-4 object-cover"
+        />
+        <h3 className="text-xl font-bold">{program.title}</h3>
+        <p className="mt-2">{program.desc}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
 
       {/* Testimonials Section */}
       <section className="bg-orange-500 text-white py-16 px-8">
@@ -331,7 +349,7 @@ export default function Home() {
     <p className="font-semibold">Contact Info</p>
     <p>08086107144</p>
     <p>Ibadan, Oyo State, Nigeria</p>
-    <p>Email: info@remiosenifoundation.org</p>
+    <p>Email: remiosenifoundationibadan@gmail.com</p>
   </div>
 
 </footer>
