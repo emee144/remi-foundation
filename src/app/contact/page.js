@@ -7,13 +7,13 @@ export default function ContactPage() {
   const centers = [
     {
       title: "Eruwa town distribution point",
-      address: "15 Eruwa, Oyo State",
+      address: "Upcoming",
       phone: ["08067542314"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
     {
       title: "Omo Adio distribution point",
-      address: "25 Omi Adio, Ibadan",
+      address: "Upcoming",
       phone: ["08012345679"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
@@ -114,7 +114,7 @@ export default function ContactPage() {
               href="mailto:remiosenifoundationibadan@gmail.com"
               className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left"
             >
-              support@remiosenifoundation.org
+              remiosenifoundationibadan@gmail.com
             </a>
             <p className="text-sm text-gray-500">
               Urgent pickup or payment issues

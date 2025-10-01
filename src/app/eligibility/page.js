@@ -77,8 +77,7 @@ export default function EligibilityPage() {
           {[
             {
               name: "Omo Adio distribution point",
-              address: "15 Market Road, Omi adio, Ibadan",
-              phone: "08012345678",
+              address: "Upcoming",
               hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
             },
             {
@@ -89,8 +88,7 @@ export default function EligibilityPage() {
             },
             {
               name: "Eruwa town distribution point",
-              address: "45  Main Road, Eruwa, Oyo State",
-              phone: "08012345680",
+              address: "Upcoming",
               hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
             },
           ].map((loc, i) => (
