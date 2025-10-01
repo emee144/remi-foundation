@@ -45,8 +45,8 @@ export default function EligibilityPage() {
           </h3>
           <ul className="list-disc pl-6 text-gray-700 space-y-2">
             <li>Valid Nigerian National Identification Number (NIN)</li>
-            <li>Age 25 years and above</li>
-            <li>Resident of Ibadan, Oyo State</li>
+            <li>Age 25yrs family men or women. Students with valid Identity </li>
+            <li>Resident of Ido, Ibarapa East Oyo State</li>
             <li>Valid phone number for notifications</li>
           </ul>
 
@@ -54,10 +54,10 @@ export default function EligibilityPage() {
             Program Rules
           </h3>
           <ul className="list-disc pl-6 text-gray-700 space-y-2">
-            <li>One purchase per household every 30 days</li>
-            <li>Valid NIN slip required at pickup</li>
+            <li>An individual can only purchase food items ONCE in 30days.</li>
+            <li>Valid NIN is required at registration point</li>
             <li>Order receipt must be presented</li>
-            <li>Payment must be completed before pickup</li>
+            <li>Payment is strictly via ATM cards or bank transfers</li>
           </ul>
         </div>
 
@@ -68,7 +68,7 @@ export default function EligibilityPage() {
           </h2>
           <div className="mt-2 w-32 h-1 bg-green-500 mx-auto rounded-full shadow-md"></div>
           <p className="text-gray-700 text-lg mt-4 max-w-2xl mx-auto">
-            Convenient pickup locations across Ibadan with flexible scheduling to
+            Convenient pickup locations across Ido and Ibarapa East with flexible scheduling to
             serve you better.
           </p>
         </div>
@@ -76,22 +76,22 @@ export default function EligibilityPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {[
             {
-              name: "Bodija Market Center",
-              address: "15 Bodija Market Road, Bodija, Ibadan",
+              name: "Omo Adio distribution point",
+              address: "15 Market Road, Omi adio, Ibadan",
               phone: "08012345678",
-              hours: ["Mon-Fri: 8AM-5PM", "Saturday: 9AM-2PM", "Sunday: Closed"],
+              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
             },
             {
-              name: "UI Gate Distribution Point",
-              address: "25 University of Ibadan Gate, Sango, Ibadan",
-              phone: "08012345679",
-              hours: ["Mon-Fri: 8AM-5PM", "Saturday: 9AM-2PM", "Sunday: Closed"],
+              name: "Ologuneru Distribution Point",
+              address: "Remi Oseni House, Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru Ibadan.",
+              phone: ["09051824664", "08086107144"],
+              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
             },
             {
-              name: "Challenge Community Center",
-              address: "45 Challenge Main Road, Challenge, Ibadan",
+              name: "Eruwa town distribution point",
+              address: "45  Main Road, Eruwa, Oyo State",
               phone: "08012345680",
-              hours: ["Mon-Fri: 8AM-5PM", "Saturday: Closed", "Sunday: Closed"],
+              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
             },
           ].map((loc, i) => (
             <div
@@ -100,7 +100,16 @@ export default function EligibilityPage() {
             >
               <h3 className="text-xl font-bold text-green-700 mb-2">{loc.name}</h3>
               <p className="text-gray-700">{loc.address}</p>
-              <p className="text-green-600 font-bold mt-3">📞 {loc.phone}</p>
+              <div className="mt-3 text-green-600 font-bold">
+  {Array.isArray(loc.phone) ? (
+    loc.phone.map((num, idx) => (
+      <p key={idx}>📞 {num}</p>
+    ))
+  ) : (
+    <p>📞 {loc.phone}</p>
+  )}
+</div>
+
               <div className="mt-4 space-y-1 text-gray-600">
                 {loc.hours.map((line, idx) => (
                   <p key={idx}>🕒 {line}</p>

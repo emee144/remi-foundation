@@ -9,7 +9,7 @@ export default function Home() {
   const router = useRouter();
 
   const navLinks = [
-    { name: "Products", href: "products" },
+    { name: "About", href: "/about" },
     { name: "Eligibility", href: "/eligibility" },
   ];
 
@@ -126,6 +126,7 @@ export default function Home() {
               className="rounded-full object-cover transform transition-transform duration-700 group-hover:scale-110 group-hover:rotate-3"
             />
           </div>
+          
         </motion.div>
       </main>
 
