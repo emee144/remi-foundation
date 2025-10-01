@@ -41,26 +41,31 @@ export default function ContactPage() {
       {/* Distribution Centers */}
       <div className="grid md:grid-cols-3 gap-8 mb-20">
         {centers.map((center, idx) => (
-          <div
-            key={idx}
-            className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition duration-300"
-          >
-            <h2 className="text-2xl font-bold text-green-700 mb-3">
-              {center.title}
-            </h2>
-            <p className="text-gray-600 mb-2">{center.address}</p>
-            <div className="text-green-600 font-semibold mb-4">
-              {center.phone.map((num, i) => (
-                <p key={i}>{num}</p>
-              ))}
-            </div>
-            <ul className="text-sm text-gray-500 space-y-1">
-              {center.hours.map((h, i) => (
-                <li key={i}>📅 {h}</li>
-              ))}
-            </ul>
-          </div>
+  <div
+    key={idx}
+    className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition duration-300"
+  >
+    <h2 className="text-2xl font-bold text-green-700 mb-3">
+      {center.title}
+    </h2>
+    <p className="text-gray-600 mb-2">{center.address}</p>
+
+    {center.phone && (
+      <div className="text-green-600 font-semibold mb-4">
+        {center.phone.map((num, i) => (
+          <p key={i}>{num}</p>
         ))}
+      </div>
+    )}
+
+    <ul className="text-sm text-gray-500 space-y-1">
+      {center.hours.map((h, i) => (
+        <li key={i}>📅 {h}</li>
+      ))}
+    </ul>
+  </div>
+))}
+
       </div>
 
       {/* Get in Touch */}

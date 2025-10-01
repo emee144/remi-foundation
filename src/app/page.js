@@ -30,8 +30,8 @@ export default function Home() {
           <Image
             src="/remilogo.jpeg"
             alt="Remi Logo"
-            width={50}
-            height={50}
+            width={100}
+            height={100}
             className="mr-3"
           />
           <div className="text-2xl md:text-3xl font-bold text-orange-600">
