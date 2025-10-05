@@ -75,19 +75,20 @@ export default function EligibilityPage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {[
-            {
-              name: "Omo Adio distribution point",
-              address: "Upcoming",
-              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
-            },
-            {
-              name: "Ologuneru Distribution Point",
+               {
+              name: "Ologuneru distribution center",
               address: "Remi Oseni House, Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru Ibadan.",
               phone: ["09051824664", "08086107144"],
               hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
             },
             {
-              name: "Eruwa town distribution point",
+              name: "Omo Adio distribution center",
+              address: "Upcoming",
+              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
+            },
+         
+            {
+              name: "Eruwa town distribution center",
               address: "Upcoming",
               hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
             },

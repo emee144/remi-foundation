@@ -18,7 +18,7 @@ export default function Location() {
       name: "Lagos Office",
       address:
         "13, Ajanaku Street, Opebi-Allen, Salvation Bus Stop, Lagos State, Nigeria.",
-      phone: ["+2348033040237", "+2348065126192", "+2348038398813"],
+      phone: ["08065126192"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
   ];

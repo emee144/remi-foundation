@@ -131,11 +131,11 @@ export default function Home() {
         <h2 className="text-3xl md:text-4xl font-bold text-orange-600 mb-12">
           Our Impact
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {[
             { number: "10,000+", label: "Meals Provided" },
             { number: "2,500+", label: "Families Supported" },
-            { number: "500+", label: "Active Volunteers" },
+           
           ].map((stat, i) => (
             <div
               key={i}

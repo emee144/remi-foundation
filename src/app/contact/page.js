@@ -5,6 +5,12 @@ import Image from "next/image";
 
 export default function ContactPage() {
   const centers = [
+     {
+      title: "Ologuneru Center",
+      address: "Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru, Ibadan",
+      phone: ["09051824664", "08086107144"],
+      hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
+    },
     {
       title: "Eruwa town distribution point",
       address: "Upcoming",
@@ -15,12 +21,7 @@ export default function ContactPage() {
       address: "Upcoming",
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
-    {
-      title: "Ologuneru Center",
-      address: "Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru, Ibadan",
-      phone: ["09051824664", "08086107144"],
-      hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
-    },
+   
   ];
 
   return (

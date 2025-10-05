@@ -26,7 +26,7 @@ const sections = [
 const objectives = [
   "To provide education financial aids, scholarships to brilliant but indigent students, and sponsor vocational & entrepreneurship training.",
   "To provide empowerment opportunities for Nigerian youths in entrepreneurial training, development, funding, financial aid, job creation, and mentoring.",
-  "To provide health for all through free medical checkups, disease prevention, and collaborations with other organizations.",
+  "To facilitate health for all through free medical checkups, disease prevention, and collaborations with health organization.",
   "To promote human dignity & better life through community projects (SOLUDERO Projects) such as drinkable water, sanitation, public toilets, road rehabilitation, and care for widows & orphans.",
   "To foster peace building, leadership development, and good governance by raising role-model leaders through trainings, seminars, symposia, and mentoring.",
   "To serve as God’s rescue agents, defending the poor & needy through access to quality life, justice, social equality, and fairness.",
@@ -122,7 +122,7 @@ export default function AboutPage() {
         className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg p-8 border-l-4 border-green-500"
       >
         <h2 className="text-3xl font-bold text-green-900 mb-6">
-          Our Vision, Aims & Objectives
+          Our Vision, Mission & Core Values
         </h2>
         <div className="space-y-4">
           {objectives.map((obj, i) => (
