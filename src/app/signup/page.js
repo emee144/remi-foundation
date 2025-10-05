@@ -58,7 +58,12 @@ export default function SignupForm() {
       setLoading(false);
       return;
     }
-
+  const allowedEmails = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|hotmail\.com|yandex\.com)$/i;
+  if (!allowedEmails.test(form.email)) {
+    setError('Email must end with @gmail.com, @yahoo.com, @outlook.com, @hotmail.com, or @yandex.com');
+    setLoading(false);
+    return;
+  }
     try {
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => formData.append(key, value));
