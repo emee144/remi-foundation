@@ -3,7 +3,7 @@ import { parse } from "url";
 import next from "next";
 
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev, conf: { basePath: "/remi-foundation" } });
+const app = next({ dev, conf: {} });
 const handle = app.getRequestHandler();
 
 const port = process.env.PORT || 3000;

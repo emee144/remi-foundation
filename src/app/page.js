@@ -30,12 +30,13 @@ export default function Home() {
           <Image
             src="/remilogo.jpeg"
             alt="Remi Logo"
-            width={100}
-            height={100}
+            width={120}
+            height={120}
             className="mr-3"
           />
           <div className="text-2xl md:text-3xl font-bold text-orange-600">
-            Remi Oseni Foundation <br/>For Better Life and Youth Empowerment<br/>RC 167162
+            REMI OSENI FOUNDATION <br/>FOR BETTER LIFE AND YOUTH EMPOWERMENT<br/>
+            <span className="text-sm font-semibold text-orange-500">RC 167162</span>
           </div>
         </div>
 
@@ -159,6 +160,16 @@ export default function Home() {
   </h2>
   <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
     {[
+      {
+        title: "",
+        desc: "",
+        img: "/remi4.jpeg",
+      },
+      {
+        title: "",
+        desc: "",
+        img: "/remi5.jpeg",
+      },
       {
         title: "Rice",
         desc: "Nutritious rice to help fight hunger",
