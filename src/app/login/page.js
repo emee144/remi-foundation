@@ -43,7 +43,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Replace with your real PHP backend endpoint
   const API_URL = "api/login";
 
   const handleLogin = async (e) => {

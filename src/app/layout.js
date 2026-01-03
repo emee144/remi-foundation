@@ -14,19 +14,12 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Remi Oseni Foundation",
   description: "Empowering youth and families through food support and community programs.",
-  icons: {
-    icon: "/remilogo.jpeg", // path in /public
-  },
 };
 
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        {/* Force favicon */}
-        <link rel="icon" href="/remilogo.jpeg" type="image/jpeg" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
