@@ -18,7 +18,6 @@ export default function Dashboard() {
     } else {
       setIsLoggedIn(true);
 
-      // Fetch profile from backend
       const fetchProfile = async () => {
         try {
           const res = await fetch("/api/profile", {
@@ -42,8 +41,7 @@ export default function Dashboard() {
     router.push("/");
   };
 
-  if (!isLoggedIn) return null; // Or a loading spinner
-
+  if (!isLoggedIn) return null; 
   const cards = [
     {
       title: "My Profile",
@@ -152,21 +150,6 @@ export default function Dashboard() {
           ))}
         </div>
       </main>
-
-      <footer className="bg-gray-500 px-8 py-6 flex flex-col md:flex-row justify-between items-center shadow-md mt-12">
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4 md:mb-0">
-          <Link href="/location">
-            <div className="px-5 py-3 bg-yellow-600 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
-              Locations
-            </div>
-          </Link>
-          <Link href="/contact">
-            <div className="px-5 py-3 bg-yellow-600 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
-              Contact Us
-            </div>
-          </Link>
-        </div>
-      </footer>
     </div>
   );
 }

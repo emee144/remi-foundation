@@ -1,53 +1,52 @@
-// app/contact/page.js
 "use client";
 
 import Image from "next/image";
 
 export default function ContactPage() {
+  
   const centers = [
-     {
-      title: "Ologuneru Center",
-      address: "Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru, Ibadan",
-      phone: ["09051824664", "08086107144"],
+ {
+      name: "Ibadan Office",
+      address:
+        "REMI OSENI HOUSE, Carpenter Bus Stop, beside Vanguard Pharmacy, Ologuneru Eruwa Road, Ologuneru, Ibadan.",
+      phone: ["08086107144", "09051824664"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
     {
-      title: "Eruwa town distribution point",
-      address: "Upcoming",
+      name: "Lagos Office",
+      address:
+        "13, Ajanaku Street, Opebi-Allen, Salvation Bus Stop, Lagos State, Nigeria.",
+      phone: ["08065126192"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
-    {
-      title: "Omo Adio distribution point",
-      address: "Upcoming",
-      hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
-    },
-   
   ];
 
   return (
+    
     <div className="bg-gradient-to-br from-green-50 to-yellow-50 min-h-screen py-16 px-6">
+    
         <Image
     src="/remilogo.jpeg"
     alt="Remi Foundation Logo"
-    width={112}      // 28 * 4 (Tailwind w-28)
-    height={112}     // 28 * 4 (Tailwind h-28)
+    width={112}      
+    height={112}    
     className="mx-auto mb-6 object-contain"
 />
 
-      {/* Header */}
+    
       <h1 className="text-5xl font-extrabold text-center mb-12 text-green-800 drop-shadow-lg">
-        📍 Contact & Locations
+        Contact
       </h1>
 
-      {/* Distribution Centers */}
-      <div className="grid md:grid-cols-3 gap-8 mb-20">
+     
+      <div className="grid md:grid-cols-2 gap-8 mb-20">
         {centers.map((center, idx) => (
   <div
     key={idx}
     className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition duration-300"
   >
     <h2 className="text-2xl font-bold text-green-700 mb-3">
-      {center.title}
+      {center.name}
     </h2>
     <p className="text-gray-600 mb-2">{center.address}</p>
 
@@ -102,7 +101,7 @@ export default function ContactPage() {
 
           <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition">
             <h3 className="text-xl font-bold text-green-700 mb-2">
-              🏢 Main Office
+              Main Office
             </h3>
             <p className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left">
               Ibadan, Oyo State, Nigeria
@@ -112,14 +111,22 @@ export default function ContactPage() {
 
           <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition">
             <h3 className="text-xl font-bold text-red-600 mb-2">
-              🚨 Emergency Contact
+              Emergency Contact
             </h3>
             <a
-              href="mailto:remiosenifoundationibadan@gmail.com"
-              className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left"
-            >
-              remiosenifoundationibadan@gmail.com
-            </a>
+  href="tel:09051824668"
+  className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left"
+>
+  0905 182 4668
+</a>
+
+<a
+  href="tel:08086107144"
+  className="block text-2xl font-extrabold text-green-600 hover:text-blue-800 transition text-left"
+>
+  0808 610 7144
+</a>
+
             <p className="text-sm text-gray-500">
               Urgent pickup or payment issues
             </p>

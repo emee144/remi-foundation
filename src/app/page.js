@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { title } from "process";
 
 export default function Home() {
   const router = useRouter();
@@ -24,48 +23,57 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-500">
-      {/* Navbar */}
-      <header className="flex flex-col md:flex-row justify-between items-center px-8 py-6 bg-white shadow-md">
-        <div className="flex items-center mb-4 md:mb-0">
-          <Image
-            src="/remilogo.jpeg"
-            alt="Remi Logo"
-            width={120}
-            height={120}
-            className="mr-3"
-          />
-          <div className="text-2xl md:text-3xl font-bold text-orange-600">
-            REMI OSENI FOUNDATION <br/>FOR BETTER LIFE AND YOUTH EMPOWERMENT<br/>
-            <span className="text-sm font-semibold text-orange-500">RC 167162</span>
+     
+      <header className="bg-white shadow-md px-6 py-4">
+  <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
+    {/* Logo + Title */}
+    <div className="flex items-center mb-4 md:mb-0">
+      <Image
+        src="/remilogo.jpeg"
+        alt="Remi Logo"
+        width={80}
+        height={80}
+        className="mr-3"
+      />
+      <div className="text-lg md:text-2xl font-bold text-orange-600">
+        REMI OSENI FOUNDATION <br />
+        <span className="text-sm font-semibold text-orange-500">
+          RC 167162
+        </span>
+      </div>
+    </div>
+
+    {/* Navigation Links */}
+    <nav className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-6 mb-4 md:mb-0">
+      {navLinks.map((link, i) => (
+        <Link key={i} href={link.href}>
+          <div className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-500 transition text-sm md:text-base font-medium text-center cursor-pointer">
+            {link.name}
           </div>
-        </div>
+        </Link>
+      ))}
+    </nav>
 
-        <nav className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6">
-          {navLinks.map((link, i) => (
-            <Link key={i} href={link.href}>
-              <div className="px-5 py-3 bg-yellow-600 text-white shadow-md rounded-lg hover:shadow-xl transition duration-300 font-medium cursor-pointer text-center">
-                {link.name}
-              </div>
-            </Link>
-          ))}
-        </nav>
-        <div className="flex gap-3 mt-4 md:mt-0">
-          <button
-            onClick={handleLogin}
-            className="bg-gray-500 text-white border px-5 py-2 rounded-lg hover:bg-orange-600 transition"
-          >
-            Login
-          </button>
-          <button
-            onClick={handleSignup}
-            className="bg-gray-500 text-white px-5 py-2 rounded-lg hover:bg-orange-600 transition"
-          >
-            Sign Up
-          </button>
-        </div>
-      </header>
+    {/* Login / Signup Buttons */}
+    <div className="flex gap-3">
+      <button
+        onClick={handleLogin}
+        className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-orange-600 transition text-sm md:text-base"
+      >
+        Login
+      </button>
+      <button
+        onClick={handleSignup}
+        className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-orange-600 transition text-sm md:text-base"
+      >
+        Sign Up
+      </button>
+    </div>
+  </div>
+</header>
 
-      {/* Hero Section */}
+
+     
       <main className="flex flex-col md:flex-row items-center justify-between px-8 py-20 flex-grow">
         <motion.div
           className="max-w-2xl"
@@ -153,7 +161,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Programs Section - orange background */}
      <section className="bg-orange-500 text-white py-16 px-8">
   <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
     Our Programs

@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
-    "lint": "eslint"
-  },
+"scripts": {
+  "dev": "next dev --webpack",
+  "build": "next build --webpack",
+  "start": "NODE_ENV=production node server.js",
+  "lint": "eslint"
+},
+
   "dependencies": {
     "@headlessui/react": "^2.2.8",
     "@radix-ui/react-dialog": "^1.1.15",

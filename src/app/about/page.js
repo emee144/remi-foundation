@@ -26,28 +26,12 @@ const visionMissionCore = [
   {
     title: "VISION STATEMENT",
     content:
-      "To create a society where everyone has access to good food, healthcare, education (including vocational training), enhanced commerce, justice, and empowerment for a dignified quality of life.",
+      "To create a society where every individual, regardless of background, has access to education, healthcare, empowerment, justice, and a dignified quality of life.",
   },
   {
     title: "MISSION STATEMENT",
     content:
       "To transform lives by providing scholarships and vocational training, empowering youths, indigent women and families, promoting health and community development, fostering peace and leadership, and defending the rights of the poor and vulnerable for a just and equitable society.",
-  },
-  {
-    title: "CORE VALUES",
-    content: `1. INTEGRITY – Upholding honesty, transparency, and accountability in all endeavors.
-
-2. COMPASSION – Serving with empathy and love for the poor, needy, and vulnerable.
-
-3. EQUITY & JUSTICE – Ensuring fairness, equality, and the defense of human rights.
-
-4. EMPOWERMENT – Equipping individuals and communities with skills and opportunities for self-reliance.
-
-5. SERVICE TO HUMANITY – Dedicating efforts to initiatives that improve lives, families, and communities.
-
-6. EXCELLENCE – Delivering impactful programs with professionalism and measurable results.
-
-7. PEACE & LEADERSHIP – Promoting peaceful coexistence, good governance, and leadership development.`,
   },
 ];
 
@@ -166,6 +150,33 @@ export default function AboutPage() {
           </motion.div>
         ))}
       </div>
+{/* Vision Statement */}
+<motion.div
+  initial={{ opacity: 0, scale: 0.9 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.7, delay: 0.4 }}
+  whileHover={{ y: -10, scale: 1.02 }}
+  className="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-green-600 max-w-6xl mx-auto mb-6"
+>
+  <h2 className="text-3xl font-bold text-green-800 mb-4 text-center">
+    {visionMissionCore[0].title}
+  </h2>
+  <p className="text-gray-700 leading-relaxed">{visionMissionCore[0].content}</p>
+</motion.div>
+
+{/* Mission Statement */}
+<motion.div
+  initial={{ opacity: 0, scale: 0.9 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.7, delay: 0.5 }}
+  whileHover={{ y: -10, scale: 1.02 }}
+  className="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-green-600 max-w-6xl mx-auto mb-6"
+>
+  <h2 className="text-3xl font-bold text-green-800 mb-4 text-center">
+    {visionMissionCore[1].title}
+  </h2>
+  <p className="text-gray-700 leading-relaxed">{visionMissionCore[1].content}</p>
+</motion.div>
 
       {/* Core Values (full width) */}
       <motion.div
@@ -176,16 +187,17 @@ export default function AboutPage() {
         className="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-green-600 max-w-6xl mx-auto mb-16"
       >
         <h2 className="text-3xl font-bold text-green-800 mb-4 text-center">
-          {visionMissionCore[2].title}
+          CORE VALUES
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
   {[
-    { title: "REMILEKUN FOOD BANK", desc: "Free food for indigent families, orphans, and the aged." },
-    { title: "ASOLUDERO FOOD MARKET", desc: "Sale of basic food items at about 60% discount for ease of purchase by the masses." },
-    { title: "EDUCATIONAL SUPPORT AT ALL LEVELS", desc: "Free JAMB, WAEC/NECO registration for brilliant but financially incapable students, orphans, or people with disabilities." },
-    { title: "MARKET WOMEN CAPITAL ENHANCEMENT", desc: "Empowerment programs to enhance business capital for market women." },
-    { title: "YOUTH DEVELOPMENT & VOCATIONAL SUPPORT", desc: "Programs to equip youths with skills and vocational training." },
-    { title: "REMI OSENI MEDICALS", desc: "Free checkups, drug donations to community health centres, and free glasses for the aged." },
+    { title: "INTEGRITY", desc: "Upholding honesty, transparency, and accountability in all endeavors." },
+    { title: "COMPASSION", desc: "Serving with empathy and love for the poor, needy, and vulnerable." },
+    { title: "EQUITY & JUSTICE ", desc: "Ensuring fairness, equality, and the defense of human rights." },
+    { title: "EMPOWERMENT", desc: "Equipping individuals and communities with skills and opportunities for self-reliance." },
+    { title: "SERVICE TO HUMANITY", desc: "Dedicating efforts to initiatives that improve lives, families, and communities." },
+    { title: "EXCELLENCE ", desc: "Delivering impactful programs with professionalism and measurable results." },
+    { title: "PEACE & LEADERSHIP", desc: "Promoting peaceful coexistence, good governance, and leadership development." },
   ].map((item, i) => (
     <div key={i} className="bg-green-50 border border-green-200 rounded-xl p-4 hover:shadow-md transition-shadow">
       <h3 className="font-semibold text-green-800 mb-1">{item.title}</h3>
@@ -196,14 +208,13 @@ export default function AboutPage() {
 
       </motion.div>
 
-      {/* Executive Profile - Tolulope Adunola Ojelabi */}
       <motion.div
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, type: "spring" }}
         className="max-w-4xl mx-auto mt-16 mb-12 bg-white rounded-2xl shadow-lg p-8 border-l-4 border-green-600 flex flex-col md:flex-row items-center md:items-start gap-6"
       >
-        {/* Image on Right for Larger Screens */}
+       
         <div className="order-1 md:order-1">
           <Image
             src="/tolu.jpg"
@@ -214,7 +225,7 @@ export default function AboutPage() {
           />
         </div>
 
-        {/* Text Content */}
+       
         <div className="order-2 md:order-2 text-center md:text-left">
           <h2 className="text-2xl font-bold text-green-900 mb-1">
             TOLULOPE ADUNOLA OJELABI

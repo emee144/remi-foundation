@@ -45,7 +45,7 @@ console.log("API returning users:", users.map(u => ({
   email: u.email,
   qrLen: u.qrCode?.length
 })));
-    // map users to include purchases with daysLeft and trimmed QR code
+    
     const usersWithDaysLeft = users.map(user => {
       const purchases = user.purchases.map(p => {
         const purchaseDate = new Date(p.purchaseDate);

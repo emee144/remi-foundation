@@ -1,4 +1,12 @@
 {
+  "development": {
+    "username": "remi",
+    "password": "R3m123",
+    "database": "remiosen_remi",
+    "host": "127.0.0.1",
+    "port": 3307,
+    "dialect": "mysql"
+  },
 
 "production": {
   "username": "${DB_USER}",

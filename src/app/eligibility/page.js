@@ -79,18 +79,18 @@ export default function EligibilityPage() {
               name: "Ologuneru distribution center",
               address: "Remi Oseni House, Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru Ibadan.",
               phone: ["09051824664", "08086107144"],
-              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
+              hours: ["Mon-Fri: 9AM-4PM"],
             },
             {
               name: "Omo Adio distribution center",
               address: "Upcoming",
-              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
+              hours: ["Mon-Fri: 9AM-4PM"],
             },
          
             {
-              name: "Eruwa town distribution center",
+              name: "Ibarapa distribution center",
               address: "Upcoming",
-              hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
+              hours: ["Mon-Fri: 9AM-4PM"],
             },
           ].map((loc, i) => (
             <div

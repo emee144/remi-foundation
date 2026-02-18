@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
-import mysql2 from "mysql2"; // explicitly import mysql2
+import mysql2 from "mysql2"; 
 
-// Initialize Sequelize
+
 export const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -10,12 +10,11 @@ export const sequelize = new Sequelize(
     host: process.env.DB_HOST || "localhost",
     port: Number(process.env.DB_PORT) || 3306,
     dialect: "mysql",
-    dialectModule: mysql2, // explicitly use mysql2
+    dialectModule: mysql2, 
     logging: false,
   }
 );
 
-// Define User model
 export const User = sequelize.define(
   "users",
   {

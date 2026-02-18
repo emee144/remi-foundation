@@ -75,7 +75,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-100 to-gray-50 flex flex-col items-center px-4 pt-12">
-      {/* Foundation Header */}
+    
       <div className="flex flex-col items-center mb-6">
         <Image
           src="/remilogo.jpeg"
@@ -113,7 +113,6 @@ export default function ProfilePage() {
 
           {!displayImage && <User className="w-20 h-20 text-gray-400" />}
 
-          {/* Camera Icon overlay */}
           <label className="absolute bottom-2 right-2 bg-green-500 p-2 rounded-full cursor-pointer hover:bg-green-600 transition">
             <Camera className="w-5 h-5 text-white" />
             <input
@@ -127,7 +126,6 @@ export default function ProfilePage() {
 
         {loading && <p className="text-green-600 text-sm">Uploading...</p>}
 
-        {/* Profile Info */}
         <div className="grid grid-cols-1 gap-4 w-full">
           {[
             ["ID", profile.id],
@@ -149,7 +147,6 @@ export default function ProfilePage() {
           ))}
         </div>
 
-        {/* QR Code */}
         {profile.qrCode && (
           <div className="mt-6 flex flex-col items-center">
             <p className="text-green-700 font-semibold mb-2">My QR Code</p>

@@ -102,13 +102,14 @@ export default function AdminPage() {
       return 0;
     }
 
-    const elapsedMs = now - purchaseTime;
-    const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
-    return Math.max(30 - elapsedDays, 0);
+    const elapsedMs = now - purchaseTime;              
+    const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24)); 
+    return Math.max(30 - elapsedDays, 0);           
   };
 
+  // Update every 6 seconds to refresh the countdown
   useEffect(() => {
-    const interval = setInterval(() => setResults(prev => [...prev]), 60000);
+    const interval = setInterval(() => setResults(prev => [...prev]), 6000);
     return () => clearInterval(interval);
   }, []);
 
@@ -288,10 +289,18 @@ export default function AdminPage() {
                       <td className="p-3">{user.gender}</td>
                       <td className="p-3">
                         {lastPurchase ? (
-                          <span className="text-sm font-semibold">{daysLeft} day(s) left</span>
+                          canPurchase ? (
+                            <button onClick={() => handlePurchase(user.id)}
+                              className="bg-yellow-500 text-white px-3 py-1 rounded font-bold hover:bg-yellow-600 transition"
+                            >
+                              Purchase
+                            </button>
+                          ) : (
+                            <span className="text-sm font-semibold text-red-600">{daysLeft} day(s) left</span>
+                          )
                         ) : (
-                          <button onClick={() => handlePurchase(user.id)} disabled={!canPurchase}
-                            className={`bg-yellow-500 text-white px-3 py-1 rounded font-bold hover:bg-yellow-600 transition ${!canPurchase ? "opacity-50 cursor-not-allowed" : ""}`}
+                          <button onClick={() => handlePurchase(user.id)}
+                            className="bg-yellow-500 text-white px-3 py-1 rounded font-bold hover:bg-yellow-600 transition"
                           >
                             Purchase
                           </button>

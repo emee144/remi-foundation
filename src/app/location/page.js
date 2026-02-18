@@ -7,18 +7,20 @@ import Image from "next/image";
 
 export default function Location() {
   const locations = [
-    {
-      name: "Ibadan Office",
-      address:
-        "REMI OSENI HOUSE, Carpenter Bus Stop, beside Vanguard Pharmacy, Ologuneru Eruwa Road, Ologuneru, Ibadan.",
-      phone: ["08086107144", "09051824664"],
+         {
+      title: "Ologuneru Center",
+      address: "Carpenter bus stop, beside Vanguard Pharmacy, Ologuneru Eruwa road, Ologuneru, Ibadan",
+      phone: ["09051824664", "08086107144"],
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
     {
-      name: "Lagos Office",
-      address:
-        "13, Ajanaku Street, Opebi-Allen, Salvation Bus Stop, Lagos State, Nigeria.",
-      phone: ["08065126192"],
+      title: "Eruwa town distribution point",
+      address: "Upcoming",
+      hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
+    },
+    {
+      title: "Omo Adio distribution point",
+      address: "Upcoming",
       hours: ["Mon-Fri: 9AM-4PM", "Saturday: 10AM-3PM", "Sunday: Closed"],
     },
   ];
@@ -52,31 +54,31 @@ export default function Location() {
               className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition duration-300 flex flex-col"
             >
               <h2 className="text-2xl font-bold text-green-700 mb-4">
-                {loc.name}
+                {loc.title}
               </h2>
 
               <div className="flex items-start gap-3 mb-4">
                 <MapPin className="w-6 h-6 text-yellow-500 mt-1" />
                 <p className="text-gray-700">{loc.address}</p>
               </div>
+<div className="flex items-start gap-3 mb-4">
+  <Phone className="w-6 h-6 text-green-600 mt-1" />
+  <ul className="text-gray-800 font-semibold space-y-1">
+    {(loc.phone || []).map((num, idx) => (
+      <li key={idx}>{num}</li>
+    ))}
+  </ul>
+</div>
 
-              <div className="flex items-start gap-3 mb-4">
-                <Phone className="w-6 h-6 text-green-600 mt-1" />
-                <ul className="text-gray-800 font-semibold space-y-1">
-                  {loc.phone.map((num, idx) => (
-                    <li key={idx}>{num}</li>
-                  ))}
-                </ul>
-              </div>
+<div className="flex items-start gap-3">
+  <Clock className="w-6 h-6 text-gray-600 mt-1" />
+  <ul className="text-gray-600 space-y-1">
+    {(loc.hours || []).map((h, idx) => (
+      <li key={idx}>{h}</li>
+    ))}
+  </ul>
+</div>
 
-              <div className="flex items-start gap-3">
-                <Clock className="w-6 h-6 text-gray-600 mt-1" />
-                <ul className="text-gray-600 space-y-1">
-                  {loc.hours.map((h, idx) => (
-                    <li key={idx}>{h}</li>
-                  ))}
-                </ul>
-              </div>
             </motion.div>
           ))}
         </div>

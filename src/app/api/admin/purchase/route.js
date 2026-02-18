@@ -1,4 +1,3 @@
-// src/app/api/admin/purchase/route.js
 import { NextResponse } from "next/server";
 import { User } from "../../../../lib/models/User";
 import { Purchase } from "../../../../lib/models/Purchase";
